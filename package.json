@@ -1,0 +1,11 @@
+{
+  "name": "compani-website-platform",
+  "version": "1.0.0",
+  "description": "Software Company Website and Enterprise Admin Panel platform",
+  "scripts": {
+    "start": "node backend/server.js",
+    "backend": "cd backend && npm start",
+    "frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build"
+  }
+}
