@@ -4,8 +4,9 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { 
   LayoutDashboard, MessageSquare, Layers, Briefcase, Users, FileText, 
-  Globe, Search, Plus, Trash2, CheckCircle2, Shield, LogOut, Save
+  Globe, Search, Plus, Trash2, CheckCircle2, Shield, LogOut, Save, Sparkles, UserPlus, FolderPlus
 } from 'lucide-react';
+import TiltCard from '../../components/3d/TiltCard';
 
 export default function AdminDashboard() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -24,10 +25,26 @@ export default function AdminDashboard() {
   const [seo, setSeo] = useState({ meta_title: '', meta_description: '', keywords: '', og_image: '' });
 
   // Form states for creating new items
-  const [newProject, setNewProject] = useState({ name: '', client: '', category: 'Web Application', short_desc: '', image: 'https://images.unsplash.com/photo-1556742049-0a67daf64f42?auto=format&fit=crop&w=800&q=80', tech_stack: 'React, Node.js' });
-  const [newTeam, setNewTeam] = useState({ name: '', designation: '', department: 'Development', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', bio: '' });
+  const [newProject, setNewProject] = useState({ 
+    name: '', 
+    client: '', 
+    category: 'Web Application', 
+    short_desc: '', 
+    image: 'https://images.unsplash.com/photo-1556742049-0a67daf64f42?auto=format&fit=crop&w=800&q=80', 
+    tech_stack: 'React, Node.js, Express, MongoDB' 
+  });
+  
+  const [newTeam, setNewTeam] = useState({ 
+    name: '', 
+    designation: '', 
+    department: 'Development', 
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', 
+    bio: '',
+    skills: 'React, Node.js, Python, Java'
+  });
+  
   const [newJob, setNewJob] = useState({ title: '', department: 'Development', location: 'Remote', work_type: 'Full-Time', salary: '$100,000 / yr', description: '' });
-  const [newBlog, setNewBlog] = useState({ title: '', category: 'Web Development', author: 'Admin', content: '', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80' });
+  const [newBlog, setNewBlog] = useState({ title: '', category: 'Web Development', author: 'Team ERA TECH', content: '', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80' });
   const [transLang, setTransLang] = useState('hi');
   const [transKey, setTransKey] = useState('nav_home');
   const [transVal, setTransVal] = useState('होम');
@@ -64,16 +81,16 @@ export default function AdminDashboard() {
     e.preventDefault();
     axios.post('/api/admin/projects', {
       ...newProject,
-      tech_stack: newProject.tech_stack.split(',').map(s => s.trim())
+      tech_stack: typeof newProject.tech_stack === 'string' ? newProject.tech_stack.split(',').map(s => s.trim()) : newProject.tech_stack
     }).then(() => {
-      alert('Project added successfully!');
+      alert('Project added successfully to website!');
       setNewProject({ name: '', client: '', category: 'Web Application', short_desc: '', image: 'https://images.unsplash.com/photo-1556742049-0a67daf64f42?auto=format&fit=crop&w=800&q=80', tech_stack: 'React, Node.js' });
       fetchDashboardData();
     });
   };
 
   const handleDeleteProject = (id) => {
-    if (confirm('Delete this project?')) {
+    if (confirm('Are you sure you want to delete this project?')) {
       axios.delete(`/api/admin/projects/${id}`).then(() => fetchDashboardData());
     }
   };
@@ -81,14 +98,14 @@ export default function AdminDashboard() {
   const handleCreateTeam = (e) => {
     e.preventDefault();
     axios.post('/api/admin/team', newTeam).then(() => {
-      alert('Team member added!');
-      setNewTeam({ name: '', designation: '', department: 'Development', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', bio: '' });
+      alert('Team member profile added successfully!');
+      setNewTeam({ name: '', designation: '', department: 'Development', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', bio: '', skills: 'React, Node.js' });
       fetchDashboardData();
     });
   };
 
   const handleDeleteTeam = (id) => {
-    if (confirm('Delete team member?')) {
+    if (confirm('Delete team member profile?')) {
       axios.delete(`/api/admin/team/${id}`).then(() => fetchDashboardData());
     }
   };
@@ -105,60 +122,64 @@ export default function AdminDashboard() {
   const handleCreateBlog = (e) => {
     e.preventDefault();
     axios.post('/api/admin/blogs', newBlog).then(() => {
-      alert('Blog published!');
-      setNewBlog({ title: '', category: 'Web Development', author: 'Admin', content: '', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80' });
+      alert('Blog post published!');
+      setNewBlog({ title: '', category: 'Web Development', author: 'Team ERA TECH', content: '', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80' });
       fetchDashboardData();
     });
   };
 
   const handleSaveTranslation = (e) => {
     e.preventDefault();
-    axios.post('/api/admin/translations', { lang: transLang, key_name: transKey, val_text: transVal }).then(() => {
-      alert(`Translation for key '${transKey}' in language '${transLang}' updated!`);
+    axios.post('/api/admin/translations', {
+      lang: transLang,
+      key: transKey,
+      val: transVal
+    }).then(() => {
+      alert('Translation saved successfully!');
     });
   };
 
   const handleSaveSeo = (e) => {
     e.preventDefault();
-    axios.put('/api/admin/seo', seo).then(() => {
-      alert('SEO Settings Updated!');
+    axios.post('/api/admin/seo', seo).then(() => {
+      alert('SEO metadata saved successfully!');
     });
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
-      {/* Top Header Bar */}
-      <div className="glass-card p-6 rounded-3xl border border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* Header */}
+      <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-2xl bg-blue-600/10 text-blue-400 border border-blue-500/20 flex items-center justify-center font-bold">
-            <Shield className="w-5 h-5" />
+          <div className="w-12 h-12 rounded-2xl bg-blue-600/10 border border-blue-500/30 text-blue-400 flex items-center justify-center">
+            <Shield className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl font-extrabold text-white">Admin Management Dashboard</h1>
-            <p className="text-xs text-gray-400">Logged in as <span className="text-blue-400 font-bold">{user?.name}</span> ({user?.role})</p>
+            <h1 className="text-2xl font-extrabold text-white">Team & Admin Management Portal</h1>
+            <p className="text-xs text-slate-400">Welcome, {user?.name || user?.email || 'Team Member'} ({user?.role || 'Admin'})</p>
           </div>
         </div>
 
         <button
           onClick={logout}
-          className="px-4 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-xs font-bold flex items-center space-x-2 transition-colors"
+          className="px-4 py-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold hover:bg-red-500 hover:text-white transition-colors flex items-center space-x-1.5"
         >
           <LogOut className="w-4 h-4" />
           <span>Sign Out</span>
         </button>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-gray-800 pb-3">
+      {/* Tabs Bar */}
+      <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
         {[
           { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-          { id: 'inquiries', label: `Inquiries (${inquiries.length})`, icon: MessageSquare },
-          { id: 'projects', label: 'Projects CMS', icon: Layers },
-          { id: 'team', label: 'Team CMS', icon: Users },
-          { id: 'jobs', label: `Jobs & Applicants (${applications.length})`, icon: Briefcase },
-          { id: 'blogs', label: 'Blog CMS', icon: FileText },
-          { id: 'languages', label: 'Multi-Lang CMS', icon: Globe },
+          { id: 'inquiries', label: 'Client Requests', icon: MessageSquare },
+          { id: 'projects', label: 'Add / Edit Projects', icon: FolderPlus },
+          { id: 'team', label: 'Add / Edit Team Profile', icon: UserPlus },
+          { id: 'jobs', label: 'Careers & Hiring', icon: Briefcase },
+          { id: 'blogs', label: 'Blogs & Articles', icon: FileText },
+          { id: 'languages', label: 'Languages (CMS)', icon: Globe },
           { id: 'seo', label: 'SEO Settings', icon: Search },
         ].map((tab) => {
           const IconComp = tab.icon;
@@ -166,10 +187,10 @@ export default function AdminDashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all ${
+              className={`px-4 py-2.5 rounded-xl text-xs font-extrabold flex items-center space-x-2 transition-all border ${
                 activeTab === tab.id
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : 'bg-gray-800/80 hover:bg-gray-700 text-gray-300'
+                  ? 'bg-blue-600 text-white border-blue-400 shadow-lg shadow-blue-600/30'
+                  : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 border-slate-800'
               }`}
             >
               <IconComp className="w-4 h-4" />
@@ -183,52 +204,58 @@ export default function AdminDashboard() {
       {activeTab === 'overview' && (
         <div className="space-y-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="glass-card p-6 rounded-2xl border border-gray-800">
-              <div className="text-xs text-gray-400 font-semibold uppercase">Total Leads / Inquiries</div>
-              <div className="text-3xl font-extrabold text-blue-400 mt-2">{stats.inquiries || 0}</div>
-            </div>
-            <div className="glass-card p-6 rounded-2xl border border-gray-800">
-              <div className="text-xs text-gray-400 font-semibold uppercase">Portfolio Projects</div>
-              <div className="text-3xl font-extrabold text-purple-400 mt-2">{stats.projects || 0}</div>
-            </div>
-            <div className="glass-card p-6 rounded-2xl border border-gray-800">
-              <div className="text-xs text-gray-400 font-semibold uppercase">Team Members</div>
-              <div className="text-3xl font-extrabold text-emerald-400 mt-2">{stats.team || 0}</div>
-            </div>
-            <div className="glass-card p-6 rounded-2xl border border-gray-800">
-              <div className="text-xs text-gray-400 font-semibold uppercase">Job Applications</div>
-              <div className="text-3xl font-extrabold text-amber-400 mt-2">{stats.applications || 0}</div>
-            </div>
+            <TiltCard glowColor="rgba(59, 130, 246, 0.4)">
+              <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 text-center">
+                <div className="text-3xl font-extrabold text-white">{stats.inquiries_count || 0}</div>
+                <div className="text-xs text-slate-400 font-semibold mt-1">Inquiries</div>
+              </div>
+            </TiltCard>
+
+            <TiltCard glowColor="rgba(168, 85, 247, 0.4)">
+              <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 text-center">
+                <div className="text-3xl font-extrabold text-blue-400">{projects.length || 0}</div>
+                <div className="text-xs text-slate-400 font-semibold mt-1">Published Projects</div>
+              </div>
+            </TiltCard>
+
+            <TiltCard glowColor="rgba(16, 185, 129, 0.4)">
+              <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 text-center">
+                <div className="text-3xl font-extrabold text-purple-400">{team.length || 0}</div>
+                <div className="text-xs text-slate-400 font-semibold mt-1">Team Members</div>
+              </div>
+            </TiltCard>
+
+            <TiltCard glowColor="rgba(245, 158, 11, 0.4)">
+              <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 text-center">
+                <div className="text-3xl font-extrabold text-emerald-400">{stats.jobs_count || 0}</div>
+                <div className="text-xs text-slate-400 font-semibold mt-1">Open Roles</div>
+              </div>
+            </TiltCard>
           </div>
 
-          {/* Recent Inquiries Table */}
-          <div className="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
-            <h3 className="text-lg font-bold text-white">Recent Customer Inquiries</h3>
+          <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-extrabold text-white">Recent Client Inquiries & Quote Requests</h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-gray-300">
-                <thead className="bg-gray-900 text-gray-400 uppercase text-[10px]">
+              <table className="w-full text-left text-xs text-slate-300">
+                <thead className="bg-slate-900 text-slate-400 uppercase text-[10px]">
                   <tr>
-                    <th className="p-3">Client Name</th>
-                    <th className="p-3">Email / Phone</th>
-                    <th className="p-3">Service</th>
+                    <th className="p-3">Client</th>
+                    <th className="p-3">Subject / Details</th>
                     <th className="p-3">Budget</th>
+                    <th className="p-3">Date</th>
                     <th className="p-3">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-800">
+                <tbody className="divide-y divide-slate-800">
                   {inquiries.slice(0, 5).map((inq) => (
                     <tr key={inq.id}>
-                      <td className="p-3 font-bold text-white">{inq.name} <br/><span className="text-[10px] text-gray-500">{inq.company_name}</span></td>
-                      <td className="p-3">{inq.email}<br/><span className="text-[10px] text-gray-400">{inq.phone}</span></td>
-                      <td className="p-3 font-semibold text-blue-400">{inq.service_required}</td>
-                      <td className="p-3">{inq.budget}</td>
+                      <td className="p-3 font-bold text-white">{inq.name}<br/><span className="text-[10px] text-slate-400">{inq.email}</span></td>
+                      <td className="p-3">{inq.subject || inq.message}</td>
+                      <td className="p-3 text-emerald-400 font-bold">{inq.budget || 'N/A'}</td>
+                      <td className="p-3 text-slate-400">{new Date(inq.created_at).toLocaleDateString()}</td>
                       <td className="p-3">
-                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                          inq.status === 'New' ? 'bg-blue-500/20 text-blue-400' :
-                          inq.status === 'In Progress' ? 'bg-amber-500/20 text-amber-400' :
-                          inq.status === 'Converted' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-gray-800 text-gray-400'
-                        }`}>
-                          {inq.status}
+                        <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-bold">
+                          {inq.status || 'New'}
                         </span>
                       </td>
                     </tr>
@@ -240,41 +267,35 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* TAB 2: INQUIRIES & LEADS */}
+      {/* TAB 2: INQUIRIES & QUOTES */}
       {activeTab === 'inquiries' && (
-        <div className="glass-card p-6 rounded-3xl border border-gray-800 space-y-6">
-          <h3 className="text-xl font-bold text-white">Client Inquiry & Quote Manager</h3>
+        <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
+          <h2 className="text-lg font-extrabold text-white">All Client Leads & Quotes</h2>
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-gray-300">
-              <thead className="bg-gray-900 text-gray-400 uppercase text-[10px]">
+            <table className="w-full text-left text-xs text-slate-300">
+              <thead className="bg-slate-900 text-slate-400 uppercase text-[10px]">
                 <tr>
-                  <th className="p-3">ID</th>
-                  <th className="p-3">Name / Company</th>
-                  <th className="p-3">Contact</th>
-                  <th className="p-3">Service / Budget</th>
-                  <th className="p-3">Project Description</th>
+                  <th className="p-3">Client</th>
+                  <th className="p-3">Message / Summary</th>
+                  <th className="p-3">Phone</th>
                   <th className="p-3">Status Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-slate-800">
                 {inquiries.map((inq) => (
                   <tr key={inq.id}>
-                    <td className="p-3 text-gray-500">#{inq.id}</td>
-                    <td className="p-3 font-bold text-white">{inq.name}<br/><span className="text-[10px] text-gray-400">{inq.company_name}</span></td>
-                    <td className="p-3">{inq.email}<br/><span className="text-[10px] text-gray-400">{inq.phone}</span></td>
-                    <td className="p-3 font-semibold text-blue-400">{inq.service_required}<br/><span className="text-[10px] text-emerald-400">{inq.budget}</span></td>
-                    <td className="p-3 max-w-xs text-[11px] text-gray-300">{inq.description}</td>
+                    <td className="p-3 font-bold text-white">{inq.name}<br/><span className="text-[10px] text-slate-400">{inq.email}</span></td>
+                    <td className="p-3">{inq.message}</td>
+                    <td className="p-3 text-blue-400">{inq.phone || 'N/A'}</td>
                     <td className="p-3">
                       <select
-                        value={inq.status}
-                        onChange={e => updateInquiryStatus(inq.id, e.target.value)}
-                        className="bg-gray-900 border border-gray-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none"
+                        value={inq.status || 'new'}
+                        onChange={(e) => updateInquiryStatus(inq.id, e.target.value)}
+                        className="bg-slate-900 border border-slate-700 rounded-lg p-1 text-xs text-white"
                       >
-                        <option value="New">New</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Contacted">Contacted</option>
-                        <option value="Converted">Converted</option>
-                        <option value="Closed">Closed</option>
+                        <option value="new">New</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="closed">Closed</option>
                       </select>
                     </td>
                   </tr>
@@ -285,119 +306,162 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* TAB 3: PROJECTS CMS */}
+      {/* TAB 3: PROJECTS MANAGER */}
       {activeTab === 'projects' && (
         <div className="space-y-8">
-          <form onSubmit={handleCreateProject} className="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
-            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
-              <Plus className="w-5 h-5 text-blue-400" />
-              <span>Add New Portfolio Project</span>
-            </h3>
+          <form onSubmit={handleCreateProject} className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-extrabold text-white flex items-center space-x-2">
+              <FolderPlus className="w-5 h-5 text-blue-400" />
+              <span>Add New Project to Website Showcase</span>
+            </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <input required placeholder="Project Name" value={newProject.name} onChange={e => setNewProject({...newProject, name: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-              <input placeholder="Client Name" value={newProject.client} onChange={e => setNewProject({...newProject, client: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-              <select value={newProject.category} onChange={e => setNewProject({...newProject, category: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white">
-                <option value="Web & Mobile App">Web & Mobile App</option>
-                <option value="Custom Software">Custom Software</option>
-                <option value="SaaS Product">SaaS Product</option>
-              </select>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Project Name</label>
+                <input required placeholder="e.g. RetailGo E-Commerce App" value={newProject.name} onChange={e => setNewProject({...newProject, name: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Client Name / Category</label>
+                <input placeholder="e.g. RetailGo Pvt Ltd" value={newProject.client} onChange={e => setNewProject({...newProject, client: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input placeholder="Tech Stack (comma separated)" value={newProject.tech_stack} onChange={e => setNewProject({...newProject, tech_stack: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-              <input placeholder="Image URL" value={newProject.image} onChange={e => setNewProject({...newProject, image: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Category</label>
+                <select value={newProject.category} onChange={e => setNewProject({...newProject, category: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+                  <option value="Web Application">Web Application (MERN)</option>
+                  <option value="Mobile App">Mobile App (Flutter / Android)</option>
+                  <option value="Enterprise Software">Enterprise Software (Java / ERP)</option>
+                  <option value="AI & Automation">AI & Automation (Python)</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Tech Stack (comma separated)</label>
+                <input placeholder="React, Node.js, Express, MongoDB" value={newProject.tech_stack} onChange={e => setNewProject({...newProject, tech_stack: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
             </div>
 
-            <textarea rows={2} placeholder="Short Description" value={newProject.short_desc} onChange={e => setNewProject({...newProject, short_desc: e.target.value})} className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
+            <div>
+              <label className="text-xs text-slate-400 font-semibold mb-1 block">Project Image URL</label>
+              <input placeholder="Image URL (e.g. https://...)" value={newProject.image} onChange={e => setNewProject({...newProject, image: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+            </div>
 
-            <button type="submit" className="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs">
-              Publish Project to Website
+            <div>
+              <label className="text-xs text-slate-400 font-semibold mb-1 block">Short Description</label>
+              <textarea rows={3} placeholder="Describe the project features and achievements..." value={newProject.short_desc} onChange={e => setNewProject({...newProject, short_desc: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+            </div>
+
+            <button type="submit" className="px-6 py-3 rounded-xl btn-3d-primary text-white font-extrabold text-xs shadow-lg">
+              Save & Publish Project
             </button>
           </form>
 
-          {/* Current Projects List */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {projects.map((proj) => (
-              <div key={proj.id} className="glass-card p-4 rounded-2xl border border-gray-800 space-y-3 relative">
-                <button onClick={() => handleDeleteProject(proj.id)} className="absolute top-3 right-3 p-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white">
-                  <Trash2 className="w-4 h-4" />
-                </button>
-                <img src={proj.image} alt={proj.name} className="w-full h-32 object-cover rounded-xl" />
-                <h4 className="font-bold text-white text-sm">{proj.name}</h4>
-                <p className="text-xs text-gray-400">{proj.category}</p>
-              </div>
-            ))}
+          {/* Current Published Projects List */}
+          <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-extrabold text-white">Live Published Projects ({projects.length})</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {projects.map((p) => (
+                <div key={p.id} className="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+                  <img src={p.image} alt={p.name} className="w-full h-32 object-cover rounded-xl" />
+                  <h3 className="font-extrabold text-white text-sm">{p.name}</h3>
+                  <p className="text-xs text-slate-400 line-clamp-2">{p.short_desc}</p>
+                  <button onClick={() => handleDeleteProject(p.id)} className="w-full py-2 rounded-xl bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white font-bold text-xs transition-colors">
+                    Delete Project
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* TAB 4: TEAM CMS */}
+      {/* TAB 4: TEAM MANAGER */}
       {activeTab === 'team' && (
         <div className="space-y-8">
-          <form onSubmit={handleCreateTeam} className="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
-            <h3 className="text-lg font-bold text-white flex items-center space-x-2">
-              <Plus className="w-5 h-5 text-blue-400" />
-              <span>Add Team Member</span>
-            </h3>
+          <form onSubmit={handleCreateTeam} className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-extrabold text-white flex items-center space-x-2">
+              <UserPlus className="w-5 h-5 text-emerald-400" />
+              <span>Add Team Member Profile Information</span>
+            </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <input required placeholder="Full Name" value={newTeam.name} onChange={e => setNewTeam({...newTeam, name: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-              <input required placeholder="Designation" value={newTeam.designation} onChange={e => setNewTeam({...newTeam, designation: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-              <select value={newTeam.department} onChange={e => setNewTeam({...newTeam, department: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white">
-                <option value="Management">Management</option>
-                <option value="Development">Development</option>
-                <option value="Design">Design</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Sales">Sales</option>
-                <option value="HR">HR</option>
-              </select>
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Member Name</label>
+                <input required placeholder="e.g. Devendra Sharma" value={newTeam.name} onChange={e => setNewTeam({...newTeam, name: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Designation / Role</label>
+                <input required placeholder="e.g. Lead Full-Stack Developer" value={newTeam.designation} onChange={e => setNewTeam({...newTeam, designation: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Department</label>
+                <select value={newTeam.department} onChange={e => setNewTeam({...newTeam, department: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+                  <option value="Development">Development</option>
+                  <option value="Design">Design</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Sales">Sales</option>
+                  <option value="HR">HR</option>
+                </select>
+              </div>
             </div>
 
-            <textarea rows={2} placeholder="Bio & Skills summary" value={newTeam.bio} onChange={e => setNewTeam({...newTeam, bio: e.target.value})} className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
+            <div>
+              <label className="text-xs text-slate-400 font-semibold mb-1 block">Photo URL</label>
+              <input placeholder="Photo URL" value={newTeam.photo} onChange={e => setNewTeam({...newTeam, photo: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+            </div>
 
-            <button type="submit" className="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs">
-              Save Team Member
+            <div>
+              <label className="text-xs text-slate-400 font-semibold mb-1 block">Bio & Technical Skills</label>
+              <textarea rows={2} placeholder="Describe experience and technical skills..." value={newTeam.bio} onChange={e => setNewTeam({...newTeam, bio: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+            </div>
+
+            <button type="submit" className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg">
+              Save Team Member Profile
             </button>
           </form>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {team.map((m) => (
-              <div key={m.id} className="glass-card p-4 rounded-2xl border border-gray-800 flex items-center justify-between">
-                <div>
-                  <h4 className="font-bold text-white text-sm">{m.name}</h4>
-                  <p className="text-xs text-blue-400">{m.designation}</p>
-                  <span className="text-[10px] text-gray-500">{m.department}</span>
+          <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-extrabold text-white">Team Members ({team.length})</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {team.map((m) => (
+                <div key={m.id} className="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <img src={m.photo} alt={m.name} className="w-10 h-10 rounded-full object-cover" />
+                    <div>
+                      <h3 className="font-extrabold text-white text-sm">{m.name}</h3>
+                      <p className="text-xs text-blue-400">{m.designation}</p>
+                    </div>
+                  </div>
+                  <button onClick={() => handleDeleteTeam(m.id)} className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-colors">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
-                <button onClick={() => handleDeleteTeam(m.id)} className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white">
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* TAB 5: JOBS & CANDIDATES */}
+      {/* TAB 5: JOBS */}
       {activeTab === 'jobs' && (
         <div className="space-y-8">
-          <form onSubmit={handleCreateJob} className="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
-            <h3 className="text-lg font-bold text-white">Post New Job Opening</h3>
+          <form onSubmit={handleCreateJob} className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-extrabold text-white">Post New Job Opening</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <input required placeholder="Job Title" value={newJob.title} onChange={e => setNewJob({...newJob, title: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-              <input placeholder="Location" value={newJob.location} onChange={e => setNewJob({...newJob, location: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-              <input placeholder="Salary" value={newJob.salary} onChange={e => setNewJob({...newJob, salary: e.target.value})} className="bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
+              <input required placeholder="Job Title" value={newJob.title} onChange={e => setNewJob({...newJob, title: e.target.value})} className="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              <input placeholder="Location" value={newJob.location} onChange={e => setNewJob({...newJob, location: e.target.value})} className="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              <input placeholder="Salary" value={newJob.salary} onChange={e => setNewJob({...newJob, salary: e.target.value})} className="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
             </div>
-            <textarea rows={2} placeholder="Job Description" value={newJob.description} onChange={e => setNewJob({...newJob, description: e.target.value})} className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-            <button type="submit" className="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs">Publish Job Opening</button>
+            <textarea rows={2} placeholder="Job Description" value={newJob.description} onChange={e => setNewJob({...newJob, description: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+            <button type="submit" className="px-6 py-2.5 rounded-xl btn-3d-primary text-white font-extrabold text-xs">Publish Job Opening</button>
           </form>
 
-          {/* Applications list */}
-          <div className="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
-            <h3 className="text-lg font-bold text-white">Candidate Applications ({applications.length})</h3>
+          <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
+            <h2 className="text-lg font-extrabold text-white">Candidate Applications ({applications.length})</h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-gray-300">
-                <thead className="bg-gray-900 text-gray-400 uppercase text-[10px]">
+              <table className="w-full text-left text-xs text-slate-300">
+                <thead className="bg-slate-900 text-slate-400 uppercase text-[10px]">
                   <tr>
                     <th className="p-3">Candidate</th>
                     <th className="p-3">Job Applied</th>
@@ -405,13 +469,13 @@ export default function AdminDashboard() {
                     <th className="p-3">Cover Note</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-800">
+                <tbody className="divide-y divide-slate-800">
                   {applications.map((app) => (
                     <tr key={app.id}>
                       <td className="p-3 font-bold text-white">{app.name}</td>
                       <td className="p-3 text-blue-400 font-semibold">{app.job_title}</td>
-                      <td className="p-3">{app.email}<br/><span className="text-[10px] text-gray-400">{app.phone}</span></td>
-                      <td className="p-3 text-[11px] text-gray-300">{app.cover_letter}</td>
+                      <td className="p-3">{app.email}<br/><span className="text-[10px] text-slate-400">{app.phone}</span></td>
+                      <td className="p-3 text-[11px] text-slate-300">{app.cover_letter}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -421,68 +485,66 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* TAB 6: MULTI-LANG CMS */}
+      {/* TAB 6: BLOGS */}
+      {activeTab === 'blogs' && (
+        <form onSubmit={handleCreateBlog} className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
+          <h2 className="text-lg font-extrabold text-white">Publish New Blog Article</h2>
+          <input required placeholder="Blog Title" value={newBlog.title} onChange={e => setNewBlog({...newBlog, title: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+          <textarea rows={4} placeholder="Article Content" value={newBlog.content} onChange={e => setNewBlog({...newBlog, content: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+          <button type="submit" className="px-6 py-2.5 rounded-xl btn-3d-primary text-white font-extrabold text-xs">Publish Article</button>
+        </form>
+      )}
+
+      {/* TAB 7: CMS TRANSLATIONS */}
       {activeTab === 'languages' && (
-        <div className="glass-card p-8 rounded-3xl border border-gray-800 space-y-6 max-w-2xl">
-          <h3 className="text-xl font-bold text-white">Multi-Language String Dictionary (EN, HI, AR)</h3>
-          
+        <div className="glass-panel-luxury p-8 rounded-3xl border border-slate-800 space-y-6 max-w-2xl">
+          <h2 className="text-xl font-extrabold text-white">Multi-Language String Dictionary (EN, HI, AR)</h2>
           <form onSubmit={handleSaveTranslation} className="space-y-4">
             <div>
-              <label className="text-xs text-gray-400 font-semibold mb-1 block">Language</label>
-              <select value={transLang} onChange={e => setTransLang(e.target.value)} className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white">
+              <label className="text-xs text-slate-400 font-semibold mb-1 block">Language</label>
+              <select value={transLang} onChange={e => setTransLang(e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
                 <option value="en">English (en)</option>
-                <option value="hi">Hindi (hi - हिंदी)</option>
-                <option value="ar">Arabic (ar - العربية)</option>
+                <option value="hi">Hindi (hi)</option>
+                <option value="ar">Arabic (ar)</option>
               </select>
             </div>
 
             <div>
-              <label className="text-xs text-gray-400 font-semibold mb-1 block">Translation Key Name</label>
-              <input required type="text" value={transKey} onChange={e => setTransKey(e.target.value)} placeholder="e.g. nav_home" className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
+              <label className="text-xs text-slate-400 font-semibold mb-1 block">Translation Key Name</label>
+              <input required type="text" value={transKey} onChange={e => setTransKey(e.target.value)} placeholder="e.g. nav_home" className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
             </div>
 
             <div>
-              <label className="text-xs text-gray-400 font-semibold mb-1 block">Translated String Value</label>
-              <input required type="text" value={transVal} onChange={e => setTransVal(e.target.value)} placeholder="e.g. होम" className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
+              <label className="text-xs text-slate-400 font-semibold mb-1 block">Translated String Value</label>
+              <input required type="text" value={transVal} onChange={e => setTransVal(e.target.value)} placeholder="e.g. Home" className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
             </div>
 
-            <button type="submit" className="w-full py-3 rounded-xl bg-blue-600 font-bold text-white text-xs flex items-center justify-center space-x-2">
+            <button type="submit" className="w-full py-3 rounded-xl btn-3d-primary font-extrabold text-white text-xs flex items-center justify-center space-x-2">
               <Save className="w-4 h-4" />
-              <span>Save Translation Entry</span>
+              <span>Save String Translation</span>
             </button>
           </form>
         </div>
       )}
 
-      {/* TAB 7: SEO SETTINGS CMS */}
+      {/* TAB 8: SEO */}
       {activeTab === 'seo' && (
-        <div className="glass-card p-8 rounded-3xl border border-gray-800 space-y-6 max-w-2xl">
-          <h3 className="text-xl font-bold text-white">Global Search Engine Optimization (SEO)</h3>
-          
+        <div className="glass-panel-luxury p-8 rounded-3xl border border-slate-800 space-y-6 max-w-2xl">
+          <h2 className="text-xl font-extrabold text-white">SEO & Social Meta Tags</h2>
           <form onSubmit={handleSaveSeo} className="space-y-4">
             <div>
-              <label className="text-xs text-gray-400 font-semibold mb-1 block">SEO Meta Title</label>
-              <input type="text" value={seo.meta_title || ''} onChange={e => setSeo({...seo, meta_title: e.target.value})} className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
+              <label className="text-xs text-slate-400 font-semibold mb-1 block">Meta Title</label>
+              <input type="text" value={seo.meta_title || ''} onChange={e => setSeo({...seo, meta_title: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
             </div>
 
             <div>
-              <label className="text-xs text-gray-400 font-semibold mb-1 block">SEO Meta Description</label>
-              <textarea rows={3} value={seo.meta_description || ''} onChange={e => setSeo({...seo, meta_description: e.target.value})} className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
+              <label className="text-xs text-slate-400 font-semibold mb-1 block">Meta Description</label>
+              <textarea rows={3} value={seo.meta_description || ''} onChange={e => setSeo({...seo, meta_description: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
             </div>
 
-            <div>
-              <label className="text-xs text-gray-400 font-semibold mb-1 block">Target Keywords</label>
-              <input type="text" value={seo.keywords || ''} onChange={e => setSeo({...seo, keywords: e.target.value})} className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-            </div>
-
-            <div>
-              <label className="text-xs text-gray-400 font-semibold mb-1 block">Open Graph Image (Social Sharing Banner)</label>
-              <input type="text" value={seo.og_image || ''} onChange={e => setSeo({...seo, og_image: e.target.value})} className="w-full bg-gray-900 border border-gray-700 rounded-xl p-2.5 text-xs text-white" />
-            </div>
-
-            <button type="submit" className="w-full py-3 rounded-xl bg-blue-600 font-bold text-white text-xs flex items-center justify-center space-x-2">
+            <button type="submit" className="w-full py-3 rounded-xl btn-3d-primary font-extrabold text-white text-xs flex items-center justify-center space-x-2">
               <Save className="w-4 h-4" />
-              <span>Update SEO Metadata</span>
+              <span>Save Meta Tags</span>
             </button>
           </form>
         </div>

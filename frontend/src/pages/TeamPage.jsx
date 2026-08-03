@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Linkedin, Twitter, Users, Briefcase, Award } from 'lucide-react';
+import { Linkedin, Twitter, Users, Briefcase, Award, TrendingUp, Sparkles, CheckCircle2, Cpu } from 'lucide-react';
+import TiltCard from '../components/3d/TiltCard';
 
 export default function TeamPage() {
   const [team, setTeam] = useState([]);
@@ -10,23 +11,115 @@ export default function TeamPage() {
     axios.get('/api/public/team').then(res => setTeam(res.data)).catch(() => {});
   }, []);
 
-  const departments = ['All', 'Management', 'Development', 'Design', 'Marketing', 'Sales', 'HR'];
+  const defaultTeam = [
+    {
+      id: 'shivangi',
+      name: 'Shivangi Pandey',
+      designation: 'Chief Technology Officer (Android & iOS) (CTO, B.Tech CSE)',
+      department: 'Management',
+      photo: '/shivangi_pandey.jpg',
+      bio: 'Directing technical architecture, Android & iOS mobile app engines, AWS cloud infrastructure, CI/CD automated deployment, and Play Store / App Store publishing.',
+      skills: 'Android & iOS, AWS Cloud, App Deployment, Flutter, Swift, Kotlin, B.Tech CSE',
+      experience: 'B.Tech CSE'
+    },
+    {
+      id: 'priyam',
+      name: 'Mr. Priyam Sinha',
+      designation: 'Head of Sales & Marketing',
+      department: 'Sales & Marketing',
+      photo: '/priyam_sinha.jpg',
+      bio: 'Leading client acquisition, growth strategy, business development, and marketing campaigns at ERA TECH SOLUTIONS.',
+      skills: 'Sales Strategy, Marketing, Client Relations, Growth, B.Tech',
+      experience: 'B.Tech'
+    },
+    {
+      id: 'vijay',
+      name: 'Mr. Vijay Kushwaha',
+      designation: 'Lead Frontend Developer (BCA & MCA CSE)',
+      department: 'Development',
+      photo: '/vijay_kushwaha.jpg',
+      bio: 'Specializing in React.js, Tailwind CSS, 3D WebGL interfaces, dynamic UI animations, and responsive web application design.',
+      skills: 'React.js, JavaScript, Tailwind CSS, 3D WebGL, BCA & MCA CSE',
+      experience: 'BCA & MCA CSE'
+    },
+    {
+      id: 'shailavi',
+      name: 'Shailavi Srivastava',
+      designation: 'Lead Backend Developer',
+      department: 'Development',
+      photo: '/shailavi_srivastava.png',
+      bio: 'Specializing in Node.js, Express APIs, Java Spring Boot microservices, Python backends, and SQL/SQLite databases.',
+      skills: 'Node.js, Express, Java Spring Boot, Python, SQL, REST APIs, B.Tech CSE',
+      experience: 'B.Tech CSE'
+    }
+  ];
+
+  // Retain ONLY Shivangi Pandey, Shailavi Srivastava, Mr. Priyam Sinha & Vijay Kushwaha in team display
+  const realTeamNames = ['shivangi', 'shailavi', 'priyam', 'vijay'];
+  const displayTeam = team.length > 0 
+    ? team.filter(m => realTeamNames.some(name => m.name.toLowerCase().includes(name)))
+    : defaultTeam;
+
+  const finalTeamList = displayTeam.length > 0 ? displayTeam : defaultTeam;
+
+  const departments = ['All', 'Management', 'Sales & Marketing', 'Development'];
 
   const filteredTeam = selectedDept === 'All'
-    ? team
-    : team.filter(m => m.department.toLowerCase() === selectedDept.toLowerCase());
+    ? finalTeamList
+    : finalTeamList.filter(m => m.department.toLowerCase().includes(selectedDept.toLowerCase()));
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <h1 className="text-xs font-bold uppercase tracking-widest text-blue-400">Our Mindpower</h1>
-        <h2 className="text-4xl font-extrabold text-white">Meet the Engineering & Design Team</h2>
-        <p className="text-gray-400 text-sm">
-          A passionate group of software architects, product designers, data engineers, and growth strategists.
+        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-extrabold">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Leadership & Mindpower</span>
+        </div>
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-white">Meet Our Team</h1>
+        <p className="text-slate-400 text-sm">
+          Dynamic tech leaders and growth strategists driving client success at ERA TECH SOLUTIONS.
         </p>
       </div>
+
+      {/* Featured CTO Leadership Hero Card */}
+      <TiltCard glowColor="rgba(59, 130, 246, 0.5)">
+        <div className="glass-panel-luxury p-8 sm:p-10 rounded-3xl border border-slate-800 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          
+          <div className="md:col-span-4 flex justify-center">
+            <div className="w-56 h-64 sm:w-64 sm:h-72 rounded-3xl overflow-hidden border-2 border-blue-500/40 shadow-2xl glow-border">
+              <img
+                src="/shivangi_pandey.jpg"
+                alt="Shivangi Pandey - CTO"
+                className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          </div>
+
+          <div className="md:col-span-8 space-y-4">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-extrabold">
+              <Cpu className="w-3.5 h-3.5" />
+              <span>Chief Technology Officer (Android & iOS)</span>
+            </div>
+            <div>
+              <h2 className="text-3xl font-extrabold text-white">Shivangi Pandey</h2>
+              <p className="text-sm font-extrabold text-gradient-primary mt-1">CTO, B.Tech CSE | Android & iOS Engineering Leadership</p>
+            </div>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              Directing technical architecture, cross-platform Android & iOS mobile app engines, AWS cloud infrastructure, CI/CD automated deployment, and Play Store / App Store publishing. Dedicated to delivering high-performance, robust mobile & web platforms for clients globally.
+            </p>
+            <div className="flex flex-wrap gap-2 pt-1">
+              {['Android & iOS', 'AWS Cloud Infrastructure', 'Play Store & App Store Deployment', 'Flutter & Swift', 'CI/CD Pipelines', 'B.Tech CSE'].map((skill, idx) => (
+                <span key={idx} className="px-3 py-1 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs font-bold text-blue-300">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </TiltCard>
 
       {/* Department Filter Tabs */}
       <div className="flex flex-wrap items-center justify-center gap-2">
@@ -34,10 +127,10 @@ export default function TeamPage() {
           <button
             key={dept}
             onClick={() => setSelectedDept(dept)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all ${
               selectedDept === dept
                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                : 'bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60'
+                : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-800'
             }`}
           >
             {dept}
@@ -48,60 +141,48 @@ export default function TeamPage() {
       {/* Team Member Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredTeam.map((member) => (
-          <div key={member.id} className="glass-card glass-card-hover rounded-3xl p-6 border border-gray-800 flex flex-col justify-between space-y-4">
-            
-            <div className="space-y-4">
-              {/* Photo & Badge */}
-              <div className="relative">
-                <img
-                  src={member.photo || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80'}
-                  alt={member.name}
-                  className="w-full h-56 object-cover rounded-2xl"
-                />
-                <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-gray-900/80 backdrop-blur-md text-[10px] font-bold text-blue-400 border border-gray-700">
-                  {member.department}
+          <TiltCard key={member.id} glowColor="rgba(59, 130, 246, 0.4)">
+            <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 flex flex-col justify-between space-y-4 h-full">
+              
+              <div className="space-y-4">
+                <div className="relative overflow-hidden rounded-2xl h-60 border border-slate-800">
+                  <img
+                    src={member.photo || '/priyam_sinha.jpg'}
+                    alt={member.name}
+                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                  />
+                  <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-[10px] font-extrabold text-blue-400 border border-slate-700">
+                    {member.department}
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-extrabold text-white">{member.name}</h3>
+                  <p className="text-xs font-extrabold text-blue-400">{member.designation}</p>
+                </div>
+
+                <p className="text-xs text-slate-300 leading-relaxed line-clamp-3">{member.bio}</p>
+
+                {member.skills && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {member.skills.split(',').map((s, idx) => (
+                      <span key={idx} className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[10px] font-bold text-slate-300">
+                        {s.trim()}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                <span className="text-[11px] text-slate-400 font-extrabold">Qualification: {member.experience || 'B.Tech'}</span>
+                <span className="text-[10px] font-extrabold text-blue-400 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">
+                  Verified Team
                 </span>
               </div>
 
-              {/* Name & Designation */}
-              <div>
-                <h3 className="text-xl font-bold text-white">{member.name}</h3>
-                <p className="text-xs font-semibold text-blue-400">{member.designation}</p>
-              </div>
-
-              {/* Bio */}
-              <p className="text-xs text-gray-300 leading-relaxed line-clamp-3">{member.bio}</p>
-
-              {/* Skills */}
-              {member.skills && (
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {member.skills.split(',').map((s, idx) => (
-                    <span key={idx} className="px-2 py-0.5 rounded bg-gray-800 text-[10px] text-gray-300">
-                      {s.trim()}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
-
-            {/* Bottom Info & Social Links */}
-            <div className="pt-4 border-t border-gray-800/80 flex items-center justify-between">
-              <span className="text-[11px] text-gray-400 font-medium">Exp: {member.experience || '5+ Years'}</span>
-              <div className="flex space-x-2">
-                {member.linkedin && (
-                  <a href={member.linkedin} target="_blank" rel="noreferrer" className="p-1.5 rounded-lg bg-gray-800 hover:bg-blue-600 hover:text-white text-gray-400 transition-colors">
-                    <Linkedin className="w-3.5 h-3.5" />
-                  </a>
-                )}
-                {member.twitter && (
-                  <a href={member.twitter} target="_blank" rel="noreferrer" className="p-1.5 rounded-lg bg-gray-800 hover:bg-sky-500 hover:text-white text-gray-400 transition-colors">
-                    <Twitter className="w-3.5 h-3.5" />
-                  </a>
-                )}
-              </div>
-            </div>
-
-          </div>
+          </TiltCard>
         ))}
       </div>
 

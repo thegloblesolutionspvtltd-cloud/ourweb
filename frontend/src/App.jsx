@@ -11,7 +11,6 @@ import TeamPage from './pages/TeamPage';
 import ServicesPage from './pages/ServicesPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProductsPage from './pages/ProductsPage';
-import CareersPage from './pages/CareersPage';
 import BlogPage from './pages/BlogPage';
 import ContactPage from './pages/ContactPage';
 import GetQuotePage from './pages/GetQuotePage';
@@ -34,7 +33,6 @@ export default function App() {
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/products" element={<ProductsPage />} />
-          <Route path="/careers" element={<CareersPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/get-quote" element={<GetQuotePage />} />

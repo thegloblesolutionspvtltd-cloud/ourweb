@@ -75,7 +75,8 @@ app.use((err, req, res, next) => {
 // Start Server
 app.listen(PORT, () => {
   console.log(`=================================================`);
-  console.log(`🛡️ Apex Software Backend running on http://localhost:${PORT}`);
+  console.log(`🛡️ ERA TECH SOLUTIONS Backend running on http://localhost:${PORT}`);
+  console.log(`⚡ Embedded Database: ONLINE (Zero MongoDB / External DB Required)`);
   console.log(`🔒 Security Hardening Active: Helmet, Rate Limiter, CORS, Payload Sanitization`);
   console.log(`=================================================`);
 });

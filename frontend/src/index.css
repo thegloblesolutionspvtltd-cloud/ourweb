@@ -5,8 +5,14 @@
 @layer base {
   :root {
     --bg-dark: #050811;
-    --card-bg: rgba(13, 19, 36, 0.7);
-    --border-glow: rgba(59, 130, 246, 0.3);
+    --card-bg: rgba(13, 19, 36, 0.92);
+    --border-glow: rgba(59, 130, 246, 0.35);
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
@@ -14,38 +20,52 @@
     color: #f8fafc;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
 /* 1. Cyber Grid Overlay & Ambient Lighting */
 .bg-cyber-grid {
   background-image: 
+    radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.12) 0%, transparent 75%),
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background-size: 100% 100%, 40px 40px, 40px 40px;
 }
 
 .bg-dark-custom {
   background-color: #050811 !important;
 }
 
-/* 2. Luxury Glassmorphism Panels */
+/* 2. 3D Perspective & Transform Helpers (No blur effect) */
+.preserve-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* 3. High Contrast Glassmorphism Panels (Crisp Text Guarantee) */
 .glass-panel-luxury {
-  background: linear-gradient(135deg, rgba(17, 25, 46, 0.75) 0%, rgba(10, 15, 30, 0.65) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+  background: rgba(11, 17, 33, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 15px 35px -10px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
 
 .glass-panel-luxury:hover {
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 20px 50px -15px rgba(59, 130, 246, 0.25);
-  transform: translateY(-4px);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 
+    0 20px 40px -10px rgba(59, 130, 246, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
 }
 
-/* 3. Glowing Border Cards */
+/* 4. Glowing Border & 3D Lighting */
 .glow-border {
   position: relative;
 }
@@ -55,14 +75,37 @@
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.5), rgba(147, 51, 234, 0.5), transparent);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.6), rgba(147, 51, 234, 0.6), transparent);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
 }
 
-/* 4. Typography & Badge Gradients */
+/* 5. Metallic 3D Button Effects */
+.btn-3d-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 50%, #7c3aed 100%);
+  box-shadow: 
+    0 8px 20px -4px rgba(59, 130, 246, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-3d-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 14px 28px -4px rgba(59, 130, 246, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn-3d-primary:active {
+  transform: translateY(1px) scale(0.99);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+}
+
+/* 6. Typography & Badge Gradients (High Contrast) */
 .text-gradient-primary {
   background: linear-gradient(135deg, #60a5fa 0%, #818cf8 40%, #c084fc 100%);
   -webkit-background-clip: text;
@@ -76,22 +119,31 @@
 }
 
 .badge-glowing {
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
 }
 
-/* 5. Floating Keyframes */
+/* 7. Keyframes Animations */
 @keyframes floatSlow {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(0.5deg); }
 }
 
 .animate-float {
   animation: floatSlow 6s ease-in-out infinite;
 }
 
-/* 6. Custom Scrollbar */
+@keyframes bounceShort {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-bounce-short {
+  animation: bounceShort 3s ease-in-out infinite;
+}
+
+/* 8. Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
 }

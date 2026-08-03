@@ -3,7 +3,14 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 
 const dbPath = path.join(__dirname, 'company.db');
-const db = new sqlite3.Database(dbPath);
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error('❌ Database Load Error:', err.message);
+  } else {
+    console.log('⚡ ERA TECH Embedded Self-Contained DB: ONLINE (No MongoDB / External DB Required)');
+    console.log('💾 Database File: company.db Auto-Synced Successfully');
+  }
+});
 
 db.serialize(() => {
   // 1. Users Table
@@ -198,7 +205,7 @@ db.serialize(() => {
 
 function updateFounderToRahulTiwari() {
   db.run(`UPDATE founder SET name = ?, designation = ?, education = ?, email = ? WHERE id = 1`,
-    ['Rahul Tiwari', 'Founder & CEO', 'B.Tech in Computer Science', 'rahul@apexsoftware.com']
+    ['Rahul Tiwari', 'Founder & CEO', 'B.Tech in Computer Science', 'tiwarir3398@gmail.com']
   );
   db.run(`UPDATE blogs SET author = ? WHERE author = 'Vikramaditya Sharma'`, ['Rahul Tiwari']);
 }
@@ -224,20 +231,20 @@ function seedInitialData() {
     if (row && row.count === 0) {
       db.run(`INSERT INTO company_info (name, hero_title, hero_subtitle, experience_years, total_projects, total_clients, countries_served, about_text, mission, vision, phone, email, address, whatsapp)
       VALUES (
-        'Apex Software Systems',
-        'Engineering Next-Gen Digital Solutions',
-        'We build scalable MERN Stack web applications, Java & Python enterprise backends, C/C++ high-performance systems, mobile apps, and AI solutions.',
-        8,
-        250,
-        180,
-        24,
-        'Apex Software Systems is a full-stack digital engineering agency. Founded by Rahul Tiwari, we empower businesses with MERN Stack development, Java enterprise software, Python AI/ML pipelines, C/C++ system engines, and cloud infrastructures.',
-        'To accelerate digital innovation globally by delivering secure, high-performance, and accessible software solutions.',
-        'To be the preferred global technology partner recognized for technical craftsmanship, product excellence, and client empowerment.',
-        '+1 (800) 555-0199',
-        'contact@apexsoftware.com',
-        '750 Innovation Way, Suite 400, Silicon Valley, CA',
-        '+18005550199'
+        'ERA TECH SOLUTIONS',
+        'Building Next-Gen Software & Digital Products',
+        'We are a fast-growing technology startup specializing in MERN Stack web applications, Java & Python enterprise backends, C/C++ high-performance systems, mobile apps, and AI solutions.',
+        1,
+        15,
+        10,
+        5,
+        'ERA TECH SOLUTIONS is a modern, fast-growing technology startup founded by Rahul Tiwari (B.Tech Computer Science). Driven by innovation, we empower businesses with high-performance MERN Stack web development, Java enterprise software, Python AI & ML, C/C++ system engines, and mobile applications.',
+        'To empower businesses and startups by delivering reliable, high-performance, and scalable software solutions built on modern tech stacks.',
+        'To become a trusted global technology company known for technical excellence, innovation, and client success.',
+        '+91 8090121332',
+        'tiwarir3398@gmail.com',
+        'Engineering Chauraha, Lucknow, Uttar Pradesh, India',
+        '+918090121332'
       )`);
     }
   });
@@ -249,29 +256,58 @@ function seedInitialData() {
       VALUES (
         'Rahul Tiwari',
         'Founder & CEO',
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-        'Tech visionary with over 14 years of experience building C/C++ high-performance engines, Java Enterprise systems, Python AI platforms, and MERN stack applications.',
-        'B.Tech in Computer Science',
-        '14+ years in Enterprise Systems & Tech Leadership',
-        'MERN Stack, Java, Python, C/C++, System Architecture, Cloud Computing, AI & ML, Technical Leadership',
-        'Our commitment is simple: build resilient software in MERN, Java, Python, C/C++ that drives measurable business growth.',
-        'https://linkedin.com/in/rahul-tiwari',
-        'rahul@apexsoftware.com'
+        '/founder.jpg',
+        'Passionate software developer and entrepreneur with a degree in Computer Science (B.Tech CSE). Founded ERA TECH SOLUTIONS to help businesses and startups build high-quality Web & Mobile applications.',
+        'B.Tech in Computer Science (CSE)',
+        'Full-Stack Developer & Tech Founder',
+        'MERN Stack, React, Node.js, Python, Java, C/C++, Flutter Mobile, Cloud Computing',
+        'Mera goal har client ko modern technology ke saath best service Dena hai. Main har project par personal focus karke fast delivery aur best code quality ensure karta hu.',
+        'https://www.linkedin.com/in/rahul-tiwari-3838232a6',
+        'tiwarir3398@gmail.com'
       )`);
+    } else {
+      db.run(`UPDATE founder SET bio = ?, education = ?, photo = ? WHERE id = 1`, [
+        'Passionate software developer and entrepreneur with a degree in Computer Science (B.Tech CSE). Founded ERA TECH SOLUTIONS to help businesses and startups build high-quality Web & Mobile applications.',
+        'B.Tech in Computer Science (CSE)',
+        '/founder.jpg'
+      ]);
     }
   });
 
-  // Seed Team
-  db.get('SELECT COUNT(*) as count FROM team', [], (err, row) => {
-    if (row && row.count === 0) {
-      const stmt = db.prepare(`INSERT INTO team (name, designation, department, photo, bio, skills, experience, linkedin, twitter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-      stmt.run('Aarav Mehta', 'Chief Technology Officer (CTO)', 'Management', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', 'Architect of high-throughput Java microservices and C++ low-latency trading systems.', 'MERN, Java, C++, Python, Kubernetes, AWS', '10 Years', 'https://linkedin.com', 'https://twitter.com');
-      stmt.run('Neha Kapoor', 'VP of Product & UI/UX', 'Design', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80', 'Pioneering human-centered UI/UX design systems for MERN and Java web portals.', 'Figma, UI/UX, MERN Design Systems', '8 Years', 'https://linkedin.com', 'https://twitter.com');
-      stmt.run('Rohan Deshmukh', 'Lead Mobile & MERN Developer', 'Development', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80', 'Specialized in cross-platform React Native, Flutter, and MERN stack web applications.', 'React, Node.js, Express, MongoDB, Flutter', '6 Years', 'https://linkedin.com', 'https://twitter.com');
-      stmt.run('Devendra Sharma', 'Senior C/C++ & Systems Engineer', 'Development', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80', 'Expert in low-level memory optimization, C/C++ game engines, and embedded microcontrollers.', 'C, C++, Embedded Systems, Linux Kernel, Rust', '9 Years', 'https://linkedin.com', 'https://twitter.com');
-      stmt.run('Ananya Gupta', 'Senior Java & Python Data Architect', 'Development', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', 'Specializes in Spring Boot Java enterprise backends and Python PyTorch AI models.', 'Java, Spring Boot, Python, PyTorch, SQL', '7 Years', 'https://linkedin.com', 'https://twitter.com');
-      stmt.finalize();
-    }
+  // Seed Team (Real Team: Shivangi Pandey, Mr. Priyam Sinha, Vijay Kushwaha & Shailavi Srivastava)
+  db.run(`DELETE FROM team WHERE name NOT LIKE '%Priyam%' AND name NOT LIKE '%Vijay%' AND name NOT LIKE '%Shivangi%' AND name NOT LIKE '%Shailavi%'`, [], () => {
+    db.get('SELECT COUNT(*) as count FROM team WHERE name LIKE "%Shivangi%"', [], (err, r) => {
+      if (!r || r.count === 0) {
+        const stmt = db.prepare(`INSERT INTO team (name, designation, department, photo, bio, skills, experience, linkedin, twitter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+        stmt.run('Shivangi Pandey', 'Chief Technology Officer (Android & iOS) (CTO, B.Tech CSE)', 'Management', '/shivangi_pandey.jpg', 'Directing technical architecture, Android & iOS mobile app engines, AWS cloud infrastructure, CI/CD automated deployment, and Play Store / App Store publishing.', 'Android & iOS, AWS Cloud, App Deployment, Flutter, Swift, Kotlin, B.Tech CSE', 'B.Tech CSE', 'https://linkedin.com', 'https://twitter.com');
+        stmt.finalize();
+      } else {
+        db.run(`UPDATE team SET designation = 'Chief Technology Officer (Android & iOS) (CTO, B.Tech CSE)', bio = 'Directing technical architecture, Android & iOS mobile app engines, AWS cloud infrastructure, CI/CD automated deployment, and Play Store / App Store publishing.', skills = 'Android & iOS, AWS Cloud, App Deployment, Flutter, Swift, Kotlin, B.Tech CSE' WHERE name LIKE "%Shivangi%"`);
+      }
+    });
+    db.get('SELECT COUNT(*) as count FROM team WHERE name LIKE "%Shailavi%"', [], (err, r) => {
+      if (!r || r.count === 0) {
+        const stmt = db.prepare(`INSERT INTO team (name, designation, department, photo, bio, skills, experience, linkedin, twitter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+        stmt.run('Shailavi Srivastava', 'Lead Backend Developer (B.Tech CSE)', 'Development', '/shailavi_srivastava.png', 'Specializing in Node.js, Express APIs, Java Spring Boot microservices, Python backends, and SQL/SQLite databases.', 'Node.js, Express, Java Spring Boot, Python, SQL, REST APIs, B.Tech CSE', 'B.Tech CSE', 'https://linkedin.com', 'https://twitter.com');
+        stmt.finalize();
+      }
+    });
+    db.get('SELECT COUNT(*) as count FROM team WHERE name LIKE "%Priyam%"', [], (err, r) => {
+      if (!r || r.count === 0) {
+        const stmt = db.prepare(`INSERT INTO team (name, designation, department, photo, bio, skills, experience, linkedin, twitter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+        stmt.run('Mr. Priyam Sinha', 'Head of Sales & Marketing (B.Tech)', 'Sales & Marketing', '/priyam_sinha.jpg', 'Leading client growth, strategic partnerships, and marketing at ERA TECH SOLUTIONS.', 'Sales Strategy, Marketing, Client Relations, Growth', 'B.Tech', 'https://linkedin.com', 'https://twitter.com');
+        stmt.finalize();
+      }
+    });
+    db.get('SELECT COUNT(*) as count FROM team WHERE name LIKE "%Vijay%"', [], (err, r) => {
+      if (!r || r.count === 0) {
+        const stmt = db.prepare(`INSERT INTO team (name, designation, department, photo, bio, skills, experience, linkedin, twitter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+        stmt.run('Mr. Vijay Sinha', 'Lead Frontend Developer (BCA & MCA CSE)', 'Development', '/vijay_kushwaha.jpg', 'Crafting high-performance React.js, Tailwind CSS, 3D WebGL interfaces, and UI design systems.', 'React.js, JavaScript, Tailwind CSS, 3D WebGL, BCA & MCA CSE', 'BCA & MCA CSE', 'https://linkedin.com', 'https://twitter.com');
+        stmt.finalize();
+      } else {
+        db.run(`UPDATE team SET name = 'Mr. Vijay Sinha', designation = 'Lead Frontend Developer (BCA & MCA CSE)', experience = 'BCA & MCA CSE' WHERE name LIKE "%Vijay%"`);
+      }
+    });
   });
 
   // Seed Services
@@ -355,7 +391,7 @@ function seedInitialData() {
         'https://google.com'
       );
       stmt.run(
-        'Apex Bank - Java Spring Boot Core Banking Portal',
+        'Era Bank - Java Spring Boot Core Banking Portal',
         'Global Horizon Bank',
         'Java Enterprise',
         'Ultra-secure Java Spring Boot enterprise transaction processing system.',
@@ -364,7 +400,7 @@ function seedInitialData() {
         JSON.stringify(['ACID transaction integrity', 'Kafka event streaming', 'Spring Security OAuth2', 'Real-time ledger audit']),
         JSON.stringify(['Java', 'Spring Boot', 'PostgreSQL', 'Kafka', 'Docker']),
         'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
-        'https://example.com/apexbank',
+        'https://example.com/erabank',
         '',
         ''
       );
@@ -391,12 +427,12 @@ function seedInitialData() {
     if (row && row.count === 0) {
       const stmt = db.prepare(`INSERT INTO products (name, logo, short_desc, features, screenshots, demo_url, pricing) VALUES (?, ?, ?, ?, ?, ?, ?)`);
       stmt.run(
-        'Apex ERP Suite (Java & MERN Stack)',
+        'Era ERP Suite (Java & MERN Stack)',
         'Layers',
         'All-in-one enterprise cloud ERP built with Java Spring Boot backend and React MERN frontend.',
         JSON.stringify(['Employee & Attendance Tracker', 'Payroll & Tax Automation', 'Multi-warehouse Inventory Control', 'Financial Ledger & Reports']),
         JSON.stringify(['https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80']),
-        'https://demo.apexsoftware.com/erp',
+        'https://demo.eratechsolutions.com/erp',
         '$199 / Month'
       );
       stmt.run(
@@ -405,7 +441,7 @@ function seedInitialData() {
         'Enterprise Python & PyTorch customer support automation platform.',
         JSON.stringify(['Custom Document RAG Ingestion', 'Multi-lingual LLM Fine-tuning', 'Python FastAPI Async Workers', 'Analytics Dashboard']),
         JSON.stringify(['https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80']),
-        'https://demo.apexsoftware.com/pybot',
+        'https://demo.eratechsolutions.com/pybot',
         '$149 / Month'
       );
       stmt.finalize();
@@ -425,7 +461,7 @@ function seedInitialData() {
         'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80',
         'The MERN stack (MongoDB, Express, React, Node.js) continues to dominate web app development. Its unified JavaScript/TypeScript language across frontend and backend allows engineering teams to ship features twice as fast...',
         JSON.stringify(['MERN Stack', 'React', 'Node.js', 'MongoDB', 'Express']),
-        'MERN Stack Advantage in 2026 | Apex Software',
+        'MERN Stack Advantage in 2026 | ERA TECH SOLUTIONS',
         'Learn why MERN stack is ideal for building high-speed web apps.'
       );
       stmt.run(
@@ -437,7 +473,7 @@ function seedInitialData() {
         'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80',
         'Selecting between Java, Python, C++, and Node.js depends heavily on your system performance requirements. Java Spring Boot offers unrivaled enterprise ecosystem stability, Python powers AI/ML, and C++ delivers raw bare-metal execution speed...',
         JSON.stringify(['Java', 'Python', 'C++', 'MERN', 'Architecture']),
-        'Java vs Python vs C++ Comparison | Apex Software',
+        'Java vs Python vs C++ Comparison | ERA TECH SOLUTIONS',
         'Technical benchmark of Java, Python, C++, and MERN stack.'
       );
       stmt.finalize();
@@ -531,8 +567,8 @@ function seedInitialData() {
     if (row && row.count === 0) {
       db.run(`INSERT INTO seo_settings (id, meta_title, meta_description, keywords, og_image) VALUES (
         1,
-        'Apex Software Systems | Founded by Rahul Tiwari | B.Tech Computer Science',
-        'Apex Software Systems is founded by Rahul Tiwari (B.Tech Computer Science). We build MERN Stack web apps, Java Enterprise backends, Python AI models, and C/C++ systems.',
+        'ERA TECH SOLUTIONS | Founded by Rahul Tiwari | B.Tech Computer Science',
+        'ERA TECH SOLUTIONS is founded by Rahul Tiwari (B.Tech Computer Science). We build MERN Stack web apps, Java Enterprise backends, Python AI models, and C/C++ systems.',
         'Rahul Tiwari, Founder & CEO, B.Tech Computer Science, MERN Stack, Java, Python, C, C++, Software company',
         'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80'
       )`);
@@ -541,3 +577,4 @@ function seedInitialData() {
 }
 
 module.exports = db;
+1

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 240" width="100%" height="100%">
+  <defs>
+    <linearGradient id="eraGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0d3b66" />
+      <stop offset="40%" stop-color="#1d4ed8" />
+      <stop offset="75%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+
+    <linearGradient id="arrowGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="50%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+  </defs>
+
+  <!-- Logo Mark (Icon) -->
+  <g transform="translate(15, 15) scale(0.42)">
+    <!-- Base Outer e curve -->
+    <path d="M 230 50 
+             C 120 50, 40 140, 40 260 
+             C 40 380, 120 460, 240 460 
+             C 330 460, 410 400, 440 320 
+             L 360 320 
+             C 340 360, 295 390, 240 390 
+             C 160 390, 115 330, 115 260 
+             C 115 190, 160 120, 240 120 
+             C 290 120, 335 150, 355 190 
+             L 435 190 
+             C 405 100, 330 50, 230 50 Z" 
+          fill="url(#eraGrad)" />
+
+    <!-- Inner 'e' crossbar -->
+    <path d="M 118 230 
+             L 420 230 
+             C 425 240, 428 250, 428 260 
+             C 428 275, 424 290, 418 300 
+             L 118 300 Z" 
+          fill="url(#eraGrad)" opacity="0.95" />
+
+    <!-- Dynamic Ascending Swoosh Arrow -->
+    <path d="M 60 410 
+             C 140 350, 240 230, 360 110 
+             L 320 110 
+             L 460 40 
+             L 410 180 
+             L 375 135 
+             C 250 260, 160 380, 85 450 Z" 
+          fill="url(#arrowGrad2)" />
+  </g>
+
+  <!-- Logo Text -->
+  <!-- Top: ERA TECH -->
+  <text x="240" y="115" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', sans-serif" font-weight="900" font-size="76" fill="#0b192c" letter-spacing="-1">
+    ERA TECH
+  </text>
+
+  <!-- Bottom: SOLUTIONS -->
+  <text x="242" y="175" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', sans-serif" font-weight="700" font-size="38" fill="#475569" letter-spacing="12">
+    SOLUTIONS
+  </text>
+</svg>

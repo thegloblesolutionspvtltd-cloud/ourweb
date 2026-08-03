@@ -14,7 +14,7 @@ const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID || null,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || null,
   sessionToken: process.env.AWS_SESSION_TOKEN || null,
-  s3Bucket: process.env.AWS_S3_BUCKET_NAME || 'apex-software-secure-vault',
+  s3Bucket: process.env.AWS_S3_BUCKET_NAME || 'eratech-solutions-secure-vault',
   kmsKeyId: process.env.AWS_KMS_KEY_ID || null, // KMS Key for server-side encryption
 };
 

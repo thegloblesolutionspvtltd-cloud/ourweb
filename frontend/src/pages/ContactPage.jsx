@@ -67,7 +67,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-white uppercase">Headquarters</h4>
-                  <p className="text-xs text-gray-300">750 Innovation Way, Suite 400, Silicon Valley, CA</p>
+                  <p className="text-xs text-gray-300">Engineering Chauraha, Lucknow, Uttar Pradesh, India</p>
                 </div>
               </div>
 
@@ -77,7 +77,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-white uppercase">Call Us</h4>
-                  <p className="text-xs text-gray-300">+1 (800) 555-0199</p>
+                  <p className="text-xs text-gray-300">+91 8090121332</p>
                 </div>
               </div>
 
@@ -87,20 +87,20 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-white uppercase">Email Inquiry</h4>
-                  <p className="text-xs text-gray-300">contact@apexsoftware.com</p>
+                  <p className="text-xs text-gray-300">tiwarir3398@gmail.com</p>
                 </div>
               </div>
             </div>
 
             {/* WhatsApp Quick Connect Button */}
             <a
-              href="https://wa.me/18005550199"
+              href="https://wa.me/918090121332"
               target="_blank"
               rel="noreferrer"
               className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/30 transition-all"
             >
               <MessageSquare className="w-4 h-4" />
-              <span>Chat directly on WhatsApp</span>
+              <span>Chat directly on WhatsApp (+91 8090121332)</span>
             </a>
           </div>
 
@@ -113,8 +113,8 @@ export default function ContactPage() {
             />
             <div className="absolute bg-gray-900/90 backdrop-blur-md px-4 py-2 rounded-xl text-center border border-gray-700">
               <MapPin className="w-5 h-5 text-blue-400 mx-auto mb-1" />
-              <div className="text-xs font-bold text-white">Silicon Valley Tech Campus</div>
-              <div className="text-[10px] text-gray-400">California, USA</div>
+              <div className="text-xs font-bold text-white">Engineering Chauraha</div>
+              <div className="text-[10px] text-gray-400">Lucknow, Uttar Pradesh, India</div>
             </div>
           </div>
 
