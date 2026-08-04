@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const { formLimiter, sanitizeString } = require('../middleware/security');
+const { sendHRInquiryEmail } = require('../services/emailService');
 
 // GET /api/public/info
 router.get('/info', (req, res) => {
@@ -122,7 +123,7 @@ router.get('/seo', (req, res) => {
 });
 
 // POST /api/public/inquiry (Contact form - Rate Limited & Sanitized)
-router.post('/inquiry', formLimiter, (req, res) => {
+router.post('/inquiry', formLimiter, async (req, res) => {
   const name = sanitizeString(req.body.name);
   const company_name = sanitizeString(req.body.company_name);
   const email = sanitizeString(req.body.email);
@@ -142,9 +143,34 @@ router.post('/inquiry', formLimiter, (req, res) => {
   }
 
   const stmt = db.prepare(`INSERT INTO inquiries (name, company_name, email, phone, service_required, budget, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'New')`);
-  stmt.run(name, company_name || '', email, phone || '', service_required || '', budget || '', description || '', function(err) {
+  stmt.run(name, company_name || '', email, phone || '', service_required || '', budget || '', description || '', async function(err) {
     if (err) return res.status(500).json({ error: 'Failed to record inquiry' });
-    res.json({ message: 'Inquiry submitted successfully', id: this.lastID });
+
+    try {
+      const emailResult = await sendHRInquiryEmail({
+        name,
+        company_name,
+        email,
+        phone,
+        service_required,
+        budget,
+        description,
+        timestamp: new Date().toLocaleString()
+      });
+
+      if (!emailResult?.delivered) {
+        return res.status(502).json({
+          error: 'Inquiry saved, but email delivery failed. Please verify your Gmail SMTP/App Password settings.'
+        });
+      }
+
+      return res.json({ message: 'Inquiry submitted successfully and HR notified via email', id: this.lastID });
+    } catch (e) {
+      console.error('HR Email Notification Error:', e.message);
+      return res.status(502).json({
+        error: 'Inquiry saved, but email delivery failed. Please verify your Gmail SMTP/App Password settings.'
+      });
+    }
   });
 });
 
@@ -170,7 +196,20 @@ router.post('/quote', formLimiter, (req, res) => {
   const stmt = db.prepare(`INSERT INTO quotes (name, email, phone, project_type, budget, timeline, features, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'New')`);
   stmt.run(name, email, phone || '', project_type || '', budget || '', timeline || '', features || '', function(err) {
     if (err) return res.status(500).json({ error: 'Failed to record quote request' });
-    res.json({ message: 'Quote request submitted successfully', id: this.lastID });
+
+    // Send automated email notification to HR
+    sendHRInquiryEmail({
+      name,
+      company_name: 'Project Quote Request',
+      email,
+      phone,
+      service_required: project_type || 'Quote Request',
+      budget,
+      description: `Timeline: ${timeline || 'N/A'}\nRequested Features: ${features || 'N/A'}`,
+      timestamp: new Date().toLocaleString()
+    }).catch(e => console.error('HR Email Quote Notification Error:', e.message));
+
+    res.json({ message: 'Quote request submitted successfully and HR notified', id: this.lastID });
   });
 });
 
@@ -191,7 +230,20 @@ router.post('/apply', formLimiter, (req, res) => {
   const stmt = db.prepare(`INSERT INTO applications (job_id, job_title, name, email, phone, cover_letter, linkedin) VALUES (?, ?, ?, ?, ?, ?, ?)`);
   stmt.run(job_id, job_title || '', name, email, phone || '', cover_letter || '', linkedin || '', function(err) {
     if (err) return res.status(500).json({ error: 'Failed to record job application' });
-    res.json({ message: 'Application submitted successfully', id: this.lastID });
+
+    // Send automated email notification to HR
+    sendHRInquiryEmail({
+      name,
+      company_name: `Job Application: ${job_title || 'General Position'}`,
+      email,
+      phone,
+      service_required: `Career Application (${job_title || 'General'})`,
+      budget: 'N/A',
+      description: `LinkedIn: ${linkedin || 'N/A'}\nCover Letter: ${cover_letter || 'N/A'}`,
+      timestamp: new Date().toLocaleString()
+    }).catch(e => console.error('HR Email Job Application Notification Error:', e.message));
+
+    res.json({ message: 'Application submitted successfully and HR notified', id: this.lastID });
   });
 });
 

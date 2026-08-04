@@ -146,6 +146,35 @@ router.post('/team', requireRole(['Super Admin', 'Admin', 'HR Manager']), (req, 
   });
 });
 
+const updateTeamMember = (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const name = sanitizeString(req.body.name);
+  const designation = sanitizeString(req.body.designation);
+  const department = sanitizeString(req.body.department);
+  const photo = sanitizeString(req.body.photo);
+  const bio = sanitizeString(req.body.bio);
+  const skills = sanitizeString(req.body.skills);
+  const experience = sanitizeString(req.body.experience);
+  const linkedin = sanitizeString(req.body.linkedin);
+  const twitter = sanitizeString(req.body.twitter);
+
+  db.run(
+    'UPDATE team SET name = ?, designation = ?, department = ?, photo = ?, bio = ?, skills = ?, experience = ?, linkedin = ?, twitter = ? WHERE id = ?',
+    [name, designation, department, photo, bio, skills, experience, linkedin, twitter, id],
+    function(err) {
+      if (err) {
+        console.error('Team update error:', err);
+        return res.status(500).json({ error: 'Failed to update team member' });
+      }
+      if (this.changes === 0) return res.status(404).json({ error: 'Team member not found' });
+      res.json({ message: 'Team member updated' });
+    }
+  );
+};
+
+router.patch('/team/:id', requireRole(['Super Admin', 'Admin', 'HR Manager']), updateTeamMember);
+router.put('/team/:id', requireRole(['Super Admin', 'Admin', 'HR Manager']), updateTeamMember);
+
 router.delete('/team/:id', requireRole(['Super Admin', 'Admin', 'HR Manager']), (req, res) => {
   const id = parseInt(req.params.id, 10);
   db.run('DELETE FROM team WHERE id=?', [id], function(err) {

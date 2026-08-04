@@ -23,9 +23,12 @@ export default function Footer() {
               <span>API Gateway: 100% Operational • SSL Encrypted</span>
             </div>
 
-            <div className="flex space-x-3 pt-2">
-              <a href="https://www.linkedin.com/in/rahul-tiwari-3838232a6" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-xl bg-slate-900 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-colors border border-slate-800">
+            <div className="flex items-center space-x-3 pt-2">
+              <a href="https://www.linkedin.com/company/the-globle-solutions-pvt-ltd/" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-xl bg-[#0A66C2] hover:bg-[#084e96] text-white flex items-center justify-center transition-all shadow-md shadow-blue-600/20" title="The Globle Solutions LinkedIn Company Page">
                 <Linkedin className="w-4 h-4" />
+              </a>
+              <a href="https://www.linkedin.com/in/rahul-tiwari-3838232a6" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-xl bg-slate-900 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-colors border border-slate-800" title="Founder Rahul Tiwari LinkedIn Profile">
+                <Linkedin className="w-4 h-4 text-blue-400" />
               </a>
               <a href="https://twitter.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-xl bg-slate-900 hover:bg-sky-500 hover:text-white flex items-center justify-center transition-colors border border-slate-800">
                 <Twitter className="w-4 h-4" />
@@ -76,7 +79,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                <span>tiwarir3398@gmail.com</span>
+                <span>thegloblesolutionspvtltd@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -85,7 +88,7 @@ export default function Footer() {
 
         {/* Bottom copyright & legal */}
         <div className="pt-8 border-t border-slate-800/60 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} ERA TECH SOLUTIONS Inc. All rights reserved. Founded by Rahul Tiwari.</p>
+          <p>© {new Date().getFullYear()} The Globle Solutions. All rights reserved. Founded by Rahul Tiwari.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#privacy" className="hover:text-slate-400 transition-colors">Privacy Policy</a>
             <a href="#terms" className="hover:text-slate-400 transition-colors">Terms of Service</a>

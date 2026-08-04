@@ -21,7 +21,7 @@ export default function FounderPage() {
     : '/founder.jpg';
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('tiwarir3398@gmail.com');
+    navigator.clipboard.writeText('thegloblesolutionspvtltd@gmail.com');
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
   };
@@ -69,6 +69,7 @@ export default function FounderPage() {
               <img
                 src={founderPhoto}
                 alt={founder?.name || 'Rahul Tiwari'}
+                onError={(e) => { e.target.onerror = null; e.target.src = '/founder.jpg'; }}
                 className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
               />
             </div>
@@ -76,7 +77,7 @@ export default function FounderPage() {
             <div>
               <h2 className="text-3xl font-extrabold text-white">{founder?.name || 'Rahul Tiwari'}</h2>
               <p className="text-sm font-extrabold text-gradient-primary">{founder?.designation || 'Founder & Lead Developer'}</p>
-              <p className="text-xs text-slate-400 font-semibold mt-1">B.Tech Computer Science & Engineering</p>
+              <p className="text-xs text-slate-400 font-semibold mt-1"></p>
             </div>
 
             {/* Email Actions: Open Gmail Web + Copy Email + LinkedIn */}
@@ -84,7 +85,7 @@ export default function FounderPage() {
               <div className="grid grid-cols-2 gap-2">
                 {/* 1. Gmail Web Direct Link */}
                 <a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=tiwarir3398@gmail.com&su=Inquiry%20for%20Rahul%20Tiwari"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=thegloblesolutionspvtltd@gmail.com&su=Inquiry%20for%20Rahul%20Tiwari"
                   target="_blank"
                   rel="noreferrer"
                   className="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors shadow-lg"
@@ -106,23 +107,34 @@ export default function FounderPage() {
 
               {/* 3. Direct Mailto link */}
               <a
-                href="mailto:tiwarir3398@gmail.com"
+                href="mailto:thegloblesolutionspvtltd@gmail.com"
                 className="py-2 rounded-xl bg-slate-900/90 text-blue-300 text-xs font-bold flex items-center justify-center space-x-2 border border-blue-500/30 hover:border-blue-400 transition-colors"
               >
                 <Mail className="w-3.5 h-3.5 text-blue-400" />
-                <span>tiwarir3398@gmail.com</span>
+                <span>thegloblesolutionspvtltd@gmail.com</span>
               </a>
 
-              {/* 4. LinkedIn */}
-              <a
-                href={founder?.linkedin || 'https://www.linkedin.com/in/rahul-tiwari-3838232a6'}
-                target="_blank"
-                rel="noreferrer"
-                className="py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold flex items-center justify-center space-x-2 border border-slate-800 transition-colors"
-              >
-                <Linkedin className="w-3.5 h-3.5 text-blue-400" />
-                <span>Connect on LinkedIn</span>
-              </a>
+              {/* 4. Company LinkedIn & Founder LinkedIn */}
+              <div className="grid grid-cols-2 gap-2">
+                <a
+                  href="https://www.linkedin.com/company/the-globle-solutions-pvt-ltd/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="py-2 px-2.5 rounded-xl bg-[#0A66C2] hover:bg-[#084e96] text-white text-xs font-bold flex items-center justify-center space-x-1.5 transition-colors shadow-md"
+                >
+                  <Linkedin className="w-3.5 h-3.5 text-white" />
+                  <span>Company LinkedIn</span>
+                </a>
+                <a
+                  href={founder?.linkedin || 'https://www.linkedin.com/in/rahul-tiwari-3838232a6'}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="py-2 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold flex items-center justify-center space-x-1.5 border border-slate-800 transition-colors"
+                >
+                  <Linkedin className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Founder Profile</span>
+                </a>
+              </div>
             </div>
           </div>
 
@@ -132,7 +144,7 @@ export default function FounderPage() {
             <div className="space-y-2">
               <h3 className="text-xs font-extrabold uppercase tracking-widest text-blue-400">Founder's Story</h3>
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                Passionate software developer and entrepreneur with a degree in Computer Science (B.Tech CSE). Founded **ERA TECH SOLUTIONS** as a modern tech startup to provide businesses, startups, and local companies with high-quality, fast, and affordable Web Applications, Mobile Apps, and Software Solutions.
+                Passionate software developer and entrepreneur with a degree in Computer Science  . Founded **The Globle Solutions** as a modern tech startup to provide businesses, startups, and local companies with high-quality, fast, and affordable Web Applications, Mobile Apps, and Software Solutions.
               </p>
             </div>
 
@@ -140,8 +152,7 @@ export default function FounderPage() {
               <div className="bg-slate-900/80 p-4 rounded-2xl border border-slate-800/80 flex items-start space-x-3">
                 <GraduationCap className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-400 uppercase">Degree</h4>
-                  <p className="text-xs text-white font-bold">B.Tech Computer Science (CSE)</p>
+                 
                 </div>
               </div>
 
@@ -186,7 +197,7 @@ export default function FounderPage() {
               <Mail className="w-5 h-5 text-blue-400" />
               <span>Send Direct Email Message to Rahul Tiwari</span>
             </h2>
-            <p className="text-xs text-slate-400">Fill out this quick form to send a message directly to tiwarir3398@gmail.com.</p>
+            <p className="text-xs text-slate-400">Fill out this quick form to send a message directly to thegloblesolutionspvtltd@gmail.com.</p>
           </div>
 
           {sentSuccess ? (
@@ -258,7 +269,7 @@ export default function FounderPage() {
                 className="w-full py-3.5 rounded-xl btn-3d-primary text-white font-extrabold text-xs shadow-lg flex items-center justify-center space-x-2"
               >
                 <Send className="w-4 h-4" />
-                <span>{sending ? 'Sending Message...' : 'Send Direct Message to tiwarir3398@gmail.com'}</span>
+                <span>{sending ? 'Sending Message...' : 'Send Direct Message to thegloblesolutionspvtltd@gmail.com'}</span>
               </button>
             </form>
           )}

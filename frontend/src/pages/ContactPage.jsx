@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Mail, Phone, MapPin, MessageSquare, Send, CheckCircle2, ShieldCheck, Upload } from 'lucide-react';
+import { Mail, Phone, MapPin, MessageSquare, Send, CheckCircle2, ShieldCheck, Upload, Linkedin } from 'lucide-react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -87,21 +87,33 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-white uppercase">Email Inquiry</h4>
-                  <p className="text-xs text-gray-300">tiwarir3398@gmail.com</p>
+                  <p className="text-xs text-gray-300">thegloblesolutionspvtltd@gmail.com</p>
                 </div>
               </div>
             </div>
 
-            {/* WhatsApp Quick Connect Button */}
-            <a
-              href="https://wa.me/918090121332"
-              target="_blank"
-              rel="noreferrer"
-              className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/30 transition-all"
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>Chat directly on WhatsApp (+91 8090121332)</span>
-            </a>
+            {/* Quick Action Buttons: WhatsApp & LinkedIn */}
+            <div className="space-y-2.5">
+              <a
+                href="https://wa.me/918090121332"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/30 transition-all"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>Chat directly on WhatsApp (+91 8090121332)</span>
+              </a>
+
+              <a
+                href="https://www.linkedin.com/company/the-globle-solutions-pvt-ltd/"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-3 rounded-xl bg-[#0A66C2] hover:bg-[#084e96] text-white font-bold text-xs flex items-center justify-center space-x-2 shadow-lg shadow-blue-600/20 transition-all"
+              >
+                <Linkedin className="w-4 h-4" />
+                <span>Follow on LinkedIn (The Globle Solutions)</span>
+              </a>
+            </div>
           </div>
 
           {/* Interactive Map Mockup */}
@@ -130,9 +142,9 @@ export default function ContactPage() {
 
             {submittedSuccess ? (
               <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-8 rounded-2xl text-center space-y-3">
-                <ShieldCheck className="w-12 h-12 mx-auto" />
-                <h4 className="font-bold text-lg">Inquiry Successfully Submitted!</h4>
-                <p className="text-xs text-gray-300">Thank you for reaching out. An engineering lead has been assigned to your message.</p>
+                <ShieldCheck className="w-12 h-12 mx-auto text-emerald-400" />
+                <h4 className="font-bold text-lg text-white">Enquiry Successfully Submitted!</h4>
+                <p className="text-xs text-slate-300">Thank you for reaching out! Your enquiry has been received and will be sent to the team at thegloblesolutionspvtltd@gmail.com.</p>
                 <button
                   onClick={() => setSubmittedSuccess(false)}
                   className="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs"

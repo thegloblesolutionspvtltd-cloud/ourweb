@@ -75,7 +75,7 @@ export default function HomePage() {
       name: 'Priya Sharma',
       company: 'Co-Founder, EduSpark Technologies',
       image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
-      review: 'ERA TECH SOLUTIONS built our student portal using MERN stack. Clean UI, fast page loads, and outstanding support directly from the founder.',
+      review: 'The Globle Solutions built our student portal using MERN stack. Clean UI, fast page loads, and outstanding support directly from the founder.',
       rating: 5,
       tag: 'EdTech Client'
     },
@@ -83,7 +83,7 @@ export default function HomePage() {
       name: 'David Miller',
       company: 'CEO, BrightCloud Tech (USA)',
       image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-      review: 'Working with ERA TECH was a fantastic experience. Great energy, fast communication, and delivered as promised on time.',
+      review: 'Working with The Globle Solutions was a fantastic experience. Great energy, fast communication, and delivered as promised on time.',
       rating: 5,
       tag: 'Global Client'
     }

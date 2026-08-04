@@ -28,9 +28,19 @@ export default function TeamPage() {
       designation: 'Head of Sales & Marketing',
       department: 'Sales & Marketing',
       photo: '/priyam_sinha.jpg',
-      bio: 'Leading client acquisition, growth strategy, business development, and marketing campaigns at ERA TECH SOLUTIONS.',
+      bio: 'Leading client acquisition, growth strategy, business development, and marketing campaigns at The Globle Solutions.',
       skills: 'Sales Strategy, Marketing, Client Relations, Growth, B.Tech',
       experience: 'B.Tech'
+    },
+    {
+      id: 'kajal',
+      name: 'Kajal Singh',
+      designation: 'Social Media Manager & Growth Specialist',
+      department: 'Sales & Marketing',
+      photo: '/kajal_singh.png',
+      bio: 'Driving social media marketing strategies, digital audience growth (2M+ Impressions, 10k+ Followers), content creation, and analytics tracking.',
+      skills: 'Social Media Strategy, Instagram & TikTok Growth, Analytics, Content Creation',
+      experience: 'Social Media Specialist'
     },
     {
       id: 'vijay',
@@ -39,7 +49,7 @@ export default function TeamPage() {
       department: 'Development',
       photo: '/vijay_kushwaha.jpg',
       bio: 'Specializing in React.js, Tailwind CSS, 3D WebGL interfaces, dynamic UI animations, and responsive web application design.',
-      skills: 'React.js, JavaScript, Tailwind CSS, 3D WebGL, BCA & MCA CSE',
+      skills: 'React.js, JavaScript, Tailwind CSS, 3D WebGL, UI/UX',
       experience: 'BCA & MCA CSE'
     },
     {
@@ -51,18 +61,35 @@ export default function TeamPage() {
       bio: 'Specializing in Node.js, Express APIs, Java Spring Boot microservices, Python backends, and SQL/SQLite databases.',
       skills: 'Node.js, Express, Java Spring Boot, Python, SQL, REST APIs, B.Tech CSE',
       experience: 'B.Tech CSE'
+    },
+    {
+      id: 'saiyaaj',
+      name: 'Saiyaaj',
+      designation: 'Lead Data Analyst & BI Specialist',
+      department: 'Data & Analytics',
+      photo: '/saiyaaj.jpg',
+      bio: 'Specializing in business intelligence, SQL data modeling, data visualization, predictive analytics, and performance dashboard reporting.',
+      skills: 'Data Analytics, SQL, Python, Power BI, Data Visualization, Business Intelligence',
+      experience: 'Data Analyst'
     }
   ];
 
-  // Retain ONLY Shivangi Pandey, Shailavi Srivastava, Mr. Priyam Sinha & Vijay Kushwaha in team display
-  const realTeamNames = ['shivangi', 'shailavi', 'priyam', 'vijay'];
-  const displayTeam = team.length > 0 
-    ? team.filter(m => realTeamNames.some(name => m.name.toLowerCase().includes(name)))
-    : defaultTeam;
+  // Retain Shivangi Pandey, Shailavi Srivastava, Mr. Priyam Sinha, Vijay Kushwaha, Kajal Singh & Saiyaaj in team display
+  const realTeamNames = ['shivangi', 'shailavi', 'priyam', 'vijay', 'kajal', 'saiyaaj'];
+  const baseList = team.length > 0 ? team : defaultTeam;
 
-  const finalTeamList = displayTeam.length > 0 ? displayTeam : defaultTeam;
+  // Guarantee all defaultTeam members exist in the list
+  const mergedList = [...baseList];
+  defaultTeam.forEach(defMember => {
+    const firstName = defMember.name.toLowerCase().split(' ')[0];
+    if (!mergedList.some(m => m.name.toLowerCase().includes(firstName))) {
+      mergedList.push(defMember);
+    }
+  });
 
-  const departments = ['All', 'Management', 'Sales & Marketing', 'Development'];
+  const finalTeamList = mergedList.filter(m => realTeamNames.some(name => m.name.toLowerCase().includes(name)));
+
+  const departments = ['All', 'Management', 'Sales & Marketing', 'Development', 'Data & Analytics'];
 
   const filteredTeam = selectedDept === 'All'
     ? finalTeamList
@@ -79,7 +106,7 @@ export default function TeamPage() {
         </div>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white">Meet Our Team</h1>
         <p className="text-slate-400 text-sm">
-          Dynamic tech leaders and growth strategists driving client success at ERA TECH SOLUTIONS.
+          Dynamic tech leaders and growth strategists driving client success at The Globle Solutions.
         </p>
       </div>
 
@@ -92,6 +119,7 @@ export default function TeamPage() {
               <img
                 src="/shivangi_pandey.jpg"
                 alt="Shivangi Pandey - CTO"
+                onError={(e) => { e.target.onerror = null; e.target.src = '/shivangi_pandey.jpg'; }}
                 className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
               />
             </div>
@@ -147,8 +175,18 @@ export default function TeamPage() {
               <div className="space-y-4">
                 <div className="relative overflow-hidden rounded-2xl h-60 border border-slate-800">
                   <img
-                    src={member.photo || '/priyam_sinha.jpg'}
+                    src={member.photo || '/founder.jpg'}
                     alt={member.name}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      if (member.name.includes('Shivangi')) e.target.src = '/shivangi_pandey.jpg';
+                      else if (member.name.includes('Priyam')) e.target.src = '/priyam_sinha.jpg';
+                      else if (member.name.includes('Vijay')) e.target.src = '/vijay_kushwaha.jpg';
+                      else if (member.name.includes('Shailavi')) e.target.src = '/shailavi_srivastava.png';
+                      else if (member.name.includes('Kajal')) e.target.src = '/kajal_singh.png';
+                      else if (member.name.includes('Saiyaaj')) e.target.src = '/saiyaaj.jpg';
+                      else e.target.src = '/founder.jpg';
+                    }}
                     className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
                   />
                   <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-[10px] font-extrabold text-blue-400 border border-slate-700">

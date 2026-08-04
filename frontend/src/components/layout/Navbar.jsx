@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
-import { Globe, Menu, X, Shield, ArrowRight, UserCheck, CheckCircle2, Sparkles, PhoneCall } from 'lucide-react';
+import { Globe, Menu, X, Shield, ArrowRight, UserCheck, CheckCircle2, Sparkles, PhoneCall, Linkedin } from 'lucide-react';
 import Logo from '../common/Logo';
 
 export default function Navbar() {
@@ -31,13 +31,24 @@ export default function Navbar() {
           <div className="flex items-center space-x-3">
             <span className="flex items-center space-x-1.5 text-emerald-400 font-bold">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>ERA TECH 3D Engineering Engine • Active</span>
+              <span>The Globle Solutions 3D Engineering Engine • Active</span>
             </span>
             <span className="text-slate-700">|</span>
             <span className="text-slate-400">AWS KMS 256-Bit Encrypted Architecture</span>
           </div>
 
           <div className="flex items-center space-x-4">
+            <a
+              href="https://www.linkedin.com/company/the-globle-solutions-pvt-ltd/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-400 hover:text-blue-300 flex items-center space-x-1 font-bold transition-colors"
+              title="The Globle Solutions LinkedIn Page"
+            >
+              <Linkedin className="w-3.5 h-3.5 text-blue-400" />
+              <span>LinkedIn</span>
+            </a>
+            <span className="text-slate-700">|</span>
             <span className="text-blue-300">Lucknow, IN HQ</span>
             <span className="text-slate-700">|</span>
             <a href="tel:+918090121332" className="text-emerald-400 hover:text-emerald-300 flex items-center space-x-1 font-extrabold">

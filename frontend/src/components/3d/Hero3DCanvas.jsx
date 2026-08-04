@@ -209,11 +209,11 @@ export default function Hero3DCanvas() {
       {/* Center Floating ERA TECH Logo & Badge */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex flex-col items-center justify-center text-center space-y-2 z-10 animate-float">
         <div className="px-5 py-2.5 rounded-2xl glass-panel-luxury border border-blue-400/50 shadow-2xl backdrop-blur-2xl flex items-center space-x-3 bg-slate-950/80">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white font-black text-sm shadow-lg animate-pulse">
-            E
+          <div className="w-10 h-10 p-0.5 bg-white rounded-xl flex items-center justify-center shadow-lg border border-blue-400/40">
+            <img src="/logo.png" alt="The Globle Solutions" className="w-full h-full object-contain rounded-lg" />
           </div>
           <div className="text-left">
-            <div className="text-base font-black text-white tracking-tight leading-none">ERA TECH</div>
+            <div className="text-base font-black text-white tracking-tight leading-none">THE GLOBLE</div>
             <div className="text-[9px] font-extrabold uppercase tracking-[0.3em] text-blue-400">SOLUTIONS</div>
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function Hero3DCanvas() {
       <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 px-5 py-2 rounded-2xl glass-panel-luxury border border-blue-500/30 shadow-2xl flex items-center space-x-2.5 pointer-events-none bg-slate-950/80">
         <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
         <span className="text-[11px] font-extrabold text-blue-300 tracking-wider uppercase">
-          ERA TECH 3D Emblem • Live Interactive Core
+          The Globle Solutions 3D Emblem • Live Interactive Core
         </span>
       </div>
     </div>

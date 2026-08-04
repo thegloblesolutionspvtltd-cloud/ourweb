@@ -29,7 +29,7 @@ export default function AboutPage() {
         </div>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white">Engineering Next-Gen Technology</h1>
         <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-          {info?.about_text || 'ERA TECH SOLUTIONS is a modern software company founded in 2023 by Rahul Tiwari (B.Tech Computer Science). Driven by innovation, we empower businesses with high-performance MERN Stack web development, Java enterprise software, Python AI & ML, C/C++ system engines, and mobile applications.'}
+          {info?.about_text || 'The Globle Solutions is a modern software company founded in 2023 by Rahul Tiwari (B.Tech Computer Science). Driven by innovation, we empower businesses with high-performance MERN Stack web development, Java enterprise software, Python AI & ML, C/C++ system engines, and mobile applications.'}
         </p>
       </div>
 
@@ -61,6 +61,7 @@ export default function AboutPage() {
               <img
                 src="/founder.jpg"
                 alt="Rahul Tiwari - Founder"
+                onError={(e) => { e.target.onerror = null; e.target.src = '/founder.jpg'; }}
                 className="w-full h-full object-cover object-top"
               />
             </div>
@@ -70,9 +71,9 @@ export default function AboutPage() {
                 <Rocket className="w-4 h-4" />
                 <span>Founded in 2023 by Engineering Leadership</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Led by Rahul Tiwari (B.Tech CS)</h2>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Lead by Rahul Tiwari</h2>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed italic">
-                "ERA TECH SOLUTIONS is built on a simple promise: delivering resilient software in MERN, Java, Python, C/C++ that drives measurable business growth for startups and enterprise clients."
+                "The Globle Solutions is built on a simple promise: delivering resilient software in MERN, Java, Python, C/C++ that drives measurable business growth for startups and enterprise clients."
               </p>
             </div>
           </div>

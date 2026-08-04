@@ -205,7 +205,7 @@ db.serialize(() => {
 
 function updateFounderToRahulTiwari() {
   db.run(`UPDATE founder SET name = ?, designation = ?, education = ?, email = ? WHERE id = 1`,
-    ['Rahul Tiwari', 'Founder & CEO', 'B.Tech in Computer Science', 'tiwarir3398@gmail.com']
+    ['Rahul Tiwari', 'Founder & CEO', 'B.Tech in Computer Science', 'thegloblesolutionspvtltd@gmail.com']
   );
   db.run(`UPDATE blogs SET author = ? WHERE author = 'Vikramaditya Sharma'`, ['Rahul Tiwari']);
 }
@@ -231,18 +231,18 @@ function seedInitialData() {
     if (row && row.count === 0) {
       db.run(`INSERT INTO company_info (name, hero_title, hero_subtitle, experience_years, total_projects, total_clients, countries_served, about_text, mission, vision, phone, email, address, whatsapp)
       VALUES (
-        'ERA TECH SOLUTIONS',
+        'The Globle Solutions',
         'Building Next-Gen Software & Digital Products',
         'We are a fast-growing technology startup specializing in MERN Stack web applications, Java & Python enterprise backends, C/C++ high-performance systems, mobile apps, and AI solutions.',
         1,
         15,
         10,
         5,
-        'ERA TECH SOLUTIONS is a modern, fast-growing technology startup founded by Rahul Tiwari (B.Tech Computer Science). Driven by innovation, we empower businesses with high-performance MERN Stack web development, Java enterprise software, Python AI & ML, C/C++ system engines, and mobile applications.',
+        'The Globle Solutions is a modern, fast-growing technology startup founded by Rahul Tiwari (B.Tech Computer Science). Driven by innovation, we empower businesses with high-performance MERN Stack web development, Java enterprise software, Python AI & ML, C/C++ system engines, and mobile applications.',
         'To empower businesses and startups by delivering reliable, high-performance, and scalable software solutions built on modern tech stacks.',
         'To become a trusted global technology company known for technical excellence, innovation, and client success.',
         '+91 8090121332',
-        'tiwarir3398@gmail.com',
+        'thegloblesolutionspvtltd@gmail.com',
         'Engineering Chauraha, Lucknow, Uttar Pradesh, India',
         '+918090121332'
       )`);
@@ -257,25 +257,25 @@ function seedInitialData() {
         'Rahul Tiwari',
         'Founder & CEO',
         '/founder.jpg',
-        'Passionate software developer and entrepreneur with a degree in Computer Science (B.Tech CSE). Founded ERA TECH SOLUTIONS to help businesses and startups build high-quality Web & Mobile applications.',
+        'Passionate software developer and entrepreneur with a degree in Computer Science (B.Tech CSE). Founded The Globle Solutions to help businesses and startups build high-quality Web & Mobile applications.',
         'B.Tech in Computer Science (CSE)',
         'Full-Stack Developer & Tech Founder',
         'MERN Stack, React, Node.js, Python, Java, C/C++, Flutter Mobile, Cloud Computing',
         'Mera goal har client ko modern technology ke saath best service Dena hai. Main har project par personal focus karke fast delivery aur best code quality ensure karta hu.',
         'https://www.linkedin.com/in/rahul-tiwari-3838232a6',
-        'tiwarir3398@gmail.com'
+        'thegloblesolutionspvtltd@gmail.com'
       )`);
     } else {
       db.run(`UPDATE founder SET bio = ?, education = ?, photo = ? WHERE id = 1`, [
-        'Passionate software developer and entrepreneur with a degree in Computer Science (B.Tech CSE). Founded ERA TECH SOLUTIONS to help businesses and startups build high-quality Web & Mobile applications.',
+        'Passionate software developer and entrepreneur with a degree in Computer Science (B.Tech CSE). Founded The Globle Solutions to help businesses and startups build high-quality Web & Mobile applications.',
         'B.Tech in Computer Science (CSE)',
         '/founder.jpg'
       ]);
     }
   });
 
-  // Seed Team (Real Team: Shivangi Pandey, Mr. Priyam Sinha, Vijay Kushwaha & Shailavi Srivastava)
-  db.run(`DELETE FROM team WHERE name NOT LIKE '%Priyam%' AND name NOT LIKE '%Vijay%' AND name NOT LIKE '%Shivangi%' AND name NOT LIKE '%Shailavi%'`, [], () => {
+  // Seed Team (Real Team: Shivangi Pandey, Mr. Priyam Sinha, Vijay Kushwaha, Shailavi Srivastava, Kajal Singh & Saiyaaj)
+  db.run(`DELETE FROM team WHERE name NOT LIKE '%Priyam%' AND name NOT LIKE '%Vijay%' AND name NOT LIKE '%Shivangi%' AND name NOT LIKE '%Shailavi%' AND name NOT LIKE '%Kajal%' AND name NOT LIKE '%Saiyaaj%'`, [], () => {
     db.get('SELECT COUNT(*) as count FROM team WHERE name LIKE "%Shivangi%"', [], (err, r) => {
       if (!r || r.count === 0) {
         const stmt = db.prepare(`INSERT INTO team (name, designation, department, photo, bio, skills, experience, linkedin, twitter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
@@ -295,7 +295,21 @@ function seedInitialData() {
     db.get('SELECT COUNT(*) as count FROM team WHERE name LIKE "%Priyam%"', [], (err, r) => {
       if (!r || r.count === 0) {
         const stmt = db.prepare(`INSERT INTO team (name, designation, department, photo, bio, skills, experience, linkedin, twitter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-        stmt.run('Mr. Priyam Sinha', 'Head of Sales & Marketing (B.Tech)', 'Sales & Marketing', '/priyam_sinha.jpg', 'Leading client growth, strategic partnerships, and marketing at ERA TECH SOLUTIONS.', 'Sales Strategy, Marketing, Client Relations, Growth', 'B.Tech', 'https://linkedin.com', 'https://twitter.com');
+        stmt.run('Mr. Priyam Sinha', 'Head of Sales & Marketing (B.Tech)', 'Sales & Marketing', '/priyam_sinha.jpg', 'Leading client growth, strategic partnerships, and marketing at TheGloble Software Pvt Ltd.', 'Sales Strategy, Marketing, Client Relations, Growth', 'B.Tech', 'https://linkedin.com', 'https://twitter.com');
+        stmt.finalize();
+      }
+    });
+    db.get('SELECT COUNT(*) as count FROM team WHERE name LIKE "%Kajal%"', [], (err, r) => {
+      if (!r || r.count === 0) {
+        const stmt = db.prepare(`INSERT INTO team (name, designation, department, photo, bio, skills, experience, linkedin, twitter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+        stmt.run('Kajal Singh', 'Social Media Manager & Growth Specialist', 'Sales & Marketing', '/kajal_singh.png', 'Driving social media marketing strategies, digital audience growth (2M+ Impressions, 10k+ Followers), content creation, and analytics tracking.', 'Social Media Strategy, Instagram & TikTok Growth, Analytics, Content Creation', 'Social Media Specialist', 'https://linkedin.com', 'https://twitter.com');
+        stmt.finalize();
+      }
+    });
+    db.get('SELECT COUNT(*) as count FROM team WHERE name LIKE "%Saiyaaj%"', [], (err, r) => {
+      if (!r || r.count === 0) {
+        const stmt = db.prepare(`INSERT INTO team (name, designation, department, photo, bio, skills, experience, linkedin, twitter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+        stmt.run('Saiyaaj', 'Lead Data Analyst & BI Specialist', 'Data & Analytics', '/saiyaaj.jpg', 'Specializing in business intelligence, SQL data modeling, data visualization, predictive analytics, and performance dashboard reporting.', 'Data Analytics, SQL, Python, Power BI, Data Visualization, Business Intelligence', 'Data Analyst', 'https://linkedin.com', 'https://twitter.com');
         stmt.finalize();
       }
     });
@@ -461,7 +475,7 @@ function seedInitialData() {
         'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80',
         'The MERN stack (MongoDB, Express, React, Node.js) continues to dominate web app development. Its unified JavaScript/TypeScript language across frontend and backend allows engineering teams to ship features twice as fast...',
         JSON.stringify(['MERN Stack', 'React', 'Node.js', 'MongoDB', 'Express']),
-        'MERN Stack Advantage in 2026 | ERA TECH SOLUTIONS',
+        'MERN Stack Advantage in 2026 | TheGloble Software Pvt Ltd',
         'Learn why MERN stack is ideal for building high-speed web apps.'
       );
       stmt.run(
@@ -473,7 +487,7 @@ function seedInitialData() {
         'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80',
         'Selecting between Java, Python, C++, and Node.js depends heavily on your system performance requirements. Java Spring Boot offers unrivaled enterprise ecosystem stability, Python powers AI/ML, and C++ delivers raw bare-metal execution speed...',
         JSON.stringify(['Java', 'Python', 'C++', 'MERN', 'Architecture']),
-        'Java vs Python vs C++ Comparison | ERA TECH SOLUTIONS',
+        'Java vs Python vs C++ Comparison | TheGloble Software Pvt Ltd',
         'Technical benchmark of Java, Python, C++, and MERN stack.'
       );
       stmt.finalize();
@@ -567,8 +581,8 @@ function seedInitialData() {
     if (row && row.count === 0) {
       db.run(`INSERT INTO seo_settings (id, meta_title, meta_description, keywords, og_image) VALUES (
         1,
-        'ERA TECH SOLUTIONS | Founded by Rahul Tiwari | B.Tech Computer Science',
-        'ERA TECH SOLUTIONS is founded by Rahul Tiwari (B.Tech Computer Science). We build MERN Stack web apps, Java Enterprise backends, Python AI models, and C/C++ systems.',
+        'TheGloble Software Pvt Ltd | Founded by Rahul Tiwari | B.Tech Computer Science',
+        'TheGloble Software Pvt Ltd is founded by Rahul Tiwari (B.Tech Computer Science). We build MERN Stack web apps, Java Enterprise backends, Python AI models, and C/C++ systems.',
         'Rahul Tiwari, Founder & CEO, B.Tech Computer Science, MERN Stack, Java, Python, C, C++, Software company',
         'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80'
       )`);

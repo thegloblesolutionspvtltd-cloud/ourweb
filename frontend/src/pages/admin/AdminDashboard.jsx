@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { 
   LayoutDashboard, MessageSquare, Layers, Briefcase, Users, FileText, 
-  Globe, Search, Plus, Trash2, CheckCircle2, Shield, LogOut, Save, Sparkles, UserPlus, FolderPlus
+  Globe, Search, Plus, Trash2, Pencil, CheckCircle2, Shield, LogOut, Save, Sparkles, UserPlus, FolderPlus
 } from 'lucide-react';
 import TiltCard from '../../components/3d/TiltCard';
 
@@ -23,6 +23,7 @@ export default function AdminDashboard() {
   const [blogs, setBlogs] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [seo, setSeo] = useState({ meta_title: '', meta_description: '', keywords: '', og_image: '' });
+  const [editingTeamId, setEditingTeamId] = useState(null);
 
   // Form states for creating new items
   const [newProject, setNewProject] = useState({ 
@@ -40,11 +41,14 @@ export default function AdminDashboard() {
     department: 'Development', 
     photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', 
     bio: '',
-    skills: 'React, Node.js, Python, Java'
+    skills: 'React, Node.js, Python, Java',
+    experience: '5+ years in backend and frontend development',
+    linkedin: '',
+    twitter: ''
   });
   
   const [newJob, setNewJob] = useState({ title: '', department: 'Development', location: 'Remote', work_type: 'Full-Time', salary: '$100,000 / yr', description: '' });
-  const [newBlog, setNewBlog] = useState({ title: '', category: 'Web Development', author: 'Team ERA TECH', content: '', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80' });
+  const [newBlog, setNewBlog] = useState({ title: '', category: 'Web Development', author: 'Team The Globle Solutions', content: '', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80' });
   const [transLang, setTransLang] = useState('hi');
   const [transKey, setTransKey] = useState('nav_home');
   const [transVal, setTransVal] = useState('होम');
@@ -95,12 +99,31 @@ export default function AdminDashboard() {
     }
   };
 
+  const resetTeamForm = () => {
+    setEditingTeamId(null);
+    setNewTeam({ name: '', designation: '', department: 'Development', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', bio: '', skills: 'React, Node.js, Python, Java', experience: '5+ years in backend and frontend development', linkedin: '', twitter: '' });
+  };
+
   const handleCreateTeam = (e) => {
     e.preventDefault();
+    if (editingTeamId) {
+      axios.put(`/api/admin/team/${editingTeamId}`, newTeam).then(() => {
+        alert('Team member profile updated successfully!');
+        resetTeamForm();
+        fetchDashboardData();
+      }).catch((error) => {
+        console.error('Team update failed:', error?.response?.data || error.message);
+        alert(`Failed to update team member profile. ${error?.response?.data?.error || ''}`);
+      });
+      return;
+    }
+
     axios.post('/api/admin/team', newTeam).then(() => {
       alert('Team member profile added successfully!');
-      setNewTeam({ name: '', designation: '', department: 'Development', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', bio: '', skills: 'React, Node.js' });
+      resetTeamForm();
       fetchDashboardData();
+    }).catch(() => {
+      alert('Failed to add team member profile.');
     });
   };
 
@@ -108,6 +131,22 @@ export default function AdminDashboard() {
     if (confirm('Delete team member profile?')) {
       axios.delete(`/api/admin/team/${id}`).then(() => fetchDashboardData());
     }
+  };
+
+  const handleEditTeam = (member) => {
+    setEditingTeamId(member.id);
+    setNewTeam({
+      name: member.name || '',
+      designation: member.designation || '',
+      department: member.department || 'Development',
+      photo: member.photo || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
+      bio: member.bio || '',
+      skills: member.skills || 'React, Node.js, Python, Java',
+      experience: member.experience || '5+ years in backend and frontend development',
+      linkedin: member.linkedin || '',
+      twitter: member.twitter || ''
+    });
+    setActiveTab('team');
   };
 
   const handleCreateJob = (e) => {
@@ -123,7 +162,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     axios.post('/api/admin/blogs', newBlog).then(() => {
       alert('Blog post published!');
-      setNewBlog({ title: '', category: 'Web Development', author: 'Team ERA TECH', content: '', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80' });
+      setNewBlog({ title: '', category: 'Web Development', author: 'Team TheGloble Software', content: '', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80' });
       fetchDashboardData();
     });
   };
@@ -411,31 +450,72 @@ export default function AdminDashboard() {
               <input placeholder="Photo URL" value={newTeam.photo} onChange={e => setNewTeam({...newTeam, photo: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
             </div>
 
-            <div>
-              <label className="text-xs text-slate-400 font-semibold mb-1 block">Bio & Technical Skills</label>
-              <textarea rows={2} placeholder="Describe experience and technical skills..." value={newTeam.bio} onChange={e => setNewTeam({...newTeam, bio: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Bio</label>
+                <textarea rows={2} placeholder="Describe experience and background..." value={newTeam.bio} onChange={e => setNewTeam({...newTeam, bio: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Skills</label>
+                <textarea rows={2} placeholder="React, Node.js, SQL, AWS..." value={newTeam.skills} onChange={e => setNewTeam({...newTeam, skills: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
             </div>
 
-            <button type="submit" className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg">
-              Save Team Member Profile
-            </button>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Experience</label>
+                <input placeholder="e.g. 5+ years" value={newTeam.experience} onChange={e => setNewTeam({...newTeam, experience: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">LinkedIn URL</label>
+                <input placeholder="LinkedIn profile URL" value={newTeam.linkedin} onChange={e => setNewTeam({...newTeam, linkedin: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 font-semibold mb-1 block">Twitter URL</label>
+                <input placeholder="Twitter profile URL" value={newTeam.twitter} onChange={e => setNewTeam({...newTeam, twitter: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+              <button type="submit" className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg">
+                {editingTeamId ? 'Update Team Member Profile' : 'Save Team Member Profile'}
+              </button>
+              {editingTeamId && (
+                <button type="button" onClick={resetTeamForm} className="px-6 py-3 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold hover:bg-slate-700">
+                  Cancel Edit
+                </button>
+              )}
+            </div>
           </form>
 
           <div className="glass-panel-luxury p-6 rounded-3xl border border-slate-800 space-y-4">
             <h2 className="text-lg font-extrabold text-white">Team Members ({team.length})</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {team.map((m) => (
-                <div key={m.id} className="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <img src={m.photo} alt={m.name} className="w-10 h-10 rounded-full object-cover" />
-                    <div>
-                      <h3 className="font-extrabold text-white text-sm">{m.name}</h3>
-                      <p className="text-xs text-blue-400">{m.designation}</p>
+                <div key={m.id} className="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center space-x-3">
+                      <img src={m.photo} alt={m.name} className="w-10 h-10 rounded-full object-cover" />
+                      <div>
+                        <h3 className="font-extrabold text-white text-sm">{m.name}</h3>
+                        <p className="text-xs text-blue-400">{m.designation}</p>
+                        <p className="text-[10px] text-slate-400 mt-1">{m.department}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => handleEditTeam(m)} className="p-2 rounded-lg bg-blue-500/10 text-blue-300 hover:bg-blue-500 hover:text-white transition-colors">
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button onClick={() => handleDeleteTeam(m.id)} className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-colors">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
-                  <button onClick={() => handleDeleteTeam(m.id)} className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-colors">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {m.bio && <p className="text-[11px] text-slate-300 line-clamp-3">{m.bio}</p>}
+                  <div className="text-[10px] text-slate-400 space-y-1">
+                    {m.skills && <div><span className="font-semibold text-slate-200">Skills:</span> {m.skills}</div>}
+                    {m.experience && <div><span className="font-semibold text-slate-200">Experience:</span> {m.experience}</div>}
+                  </div>
                 </div>
               ))}
             </div>
