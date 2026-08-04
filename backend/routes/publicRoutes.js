@@ -143,34 +143,23 @@ router.post('/inquiry', formLimiter, async (req, res) => {
   }
 
   const stmt = db.prepare(`INSERT INTO inquiries (name, company_name, email, phone, service_required, budget, description, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'New')`);
-  stmt.run(name, company_name || '', email, phone || '', service_required || '', budget || '', description || '', async function(err) {
+  stmt.run(name, company_name || '', email, phone || '', service_required || '', budget || '', description || '', function(err) {
     if (err) return res.status(500).json({ error: 'Failed to record inquiry' });
 
-    try {
-      const emailResult = await sendHRInquiryEmail({
-        name,
-        company_name,
-        email,
-        phone,
-        service_required,
-        budget,
-        description,
-        timestamp: new Date().toLocaleString()
-      });
+    // Return instant success response to frontend immediately (prevents 504 Timeout)
+    res.json({ message: 'Inquiry submitted successfully', id: this.lastID });
 
-      if (!emailResult?.delivered) {
-        return res.status(502).json({
-          error: 'Inquiry saved, but email delivery failed. Please verify your Gmail SMTP/App Password settings.'
-        });
-      }
-
-      return res.json({ message: 'Inquiry submitted successfully and HR notified via email', id: this.lastID });
-    } catch (e) {
-      console.error('HR Email Notification Error:', e.message);
-      return res.status(502).json({
-        error: 'Inquiry saved, but email delivery failed. Please verify your Gmail SMTP/App Password settings.'
-      });
-    }
+    // Send email asynchronously in background without blocking HTTP thread
+    sendHRInquiryEmail({
+      name,
+      company_name,
+      email,
+      phone,
+      service_required,
+      budget,
+      description,
+      timestamp: new Date().toLocaleString()
+    }).catch(e => console.error('HR Email Notification Error:', e.message));
   });
 });
 
