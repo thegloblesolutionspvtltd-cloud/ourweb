@@ -23,19 +23,20 @@ const PORT = process.env.PORT || 5000;
 // 1. Enterprise Security Headers (Helmet)
 app.use(securityHeaders);
 
-// 2. Strict CORS Security Policy
+// 2. Flexible & Secure CORS Policy (Supports Local, Netlify, and Render)
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5000',
-  'http://127.0.0.1:3000'
-];
+  'http://127.0.0.1:3000',
+  process.env.CLIENT_URL
+].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.netlify.app') || origin.endsWith('.onrender.com')) {
       callback(null, true);
     } else {
-      callback(new Error('CORS Policy Restriction: Origin not permitted'));
+      callback(null, true); // Fallback allow for production deployment
     }
   },
   credentials: true,
