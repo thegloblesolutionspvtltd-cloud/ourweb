@@ -64,6 +64,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Root API Health Endpoint
+app.get('/', (req, res) => {
+  res.json({ message: "The Globle Solutions Backend REST API Engine is ONLINE", status: "Active", health: "/api/health" });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', security: 'hardened', timestamp: new Date().toISOString() });

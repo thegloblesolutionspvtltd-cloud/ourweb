@@ -1,7 +1,12 @@
 [build]
   base = "frontend"
   command = "npm run build"
-  publish = "frontend/dist"
+  publish = "dist"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://ourweb-xkd3.onrender.com/api/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"
