@@ -8,12 +8,12 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
  * Creates Nodemailer Transport using environment variables or returns fallback logger.
  */
 function createTransporter() {
-  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const host = process.env.SMTP_HOST || 'smtp-relay.brevo.com';
   const port = parseInt(process.env.SMTP_PORT || '587', 10);
   const user = process.env.SMTP_USER || process.env.HR_EMAIL || 'thegloblesolutionspvtltd@gmail.com';
   const pass = process.env.SMTP_PASS;
 
-  if (user && pass) {
+  if (pass) {
     const transportConfig = {
       host: host,
       port: port,
