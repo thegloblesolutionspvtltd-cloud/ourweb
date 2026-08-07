@@ -39,10 +39,22 @@ export default function FounderPage() {
       setSending(false);
       setSentSuccess(true);
       setMsgData({ name: '', email: '', phone: '', message: '' });
-    }).catch(() => {
+    }).catch(err => {
       setSending(false);
-      alert('Message submitted successfully!');
-      setSentSuccess(true);
+      const errMsg = String(err.response?.data?.error || err.response?.data?.message || err.message || '');
+      if (
+        err.response?.status === 200 ||
+        err.response?.status === 201 ||
+        err.response?.data?.id ||
+        errMsg.toLowerCase().includes('saved') ||
+        errMsg.toLowerCase().includes('submitted') ||
+        errMsg.toLowerCase().includes('success')
+      ) {
+        setSentSuccess(true);
+        setMsgData({ name: '', email: '', phone: '', message: '' });
+      } else {
+        alert('Submission Error: ' + errMsg);
+      }
     });
   };
 
