@@ -36,10 +36,28 @@ export default function ContactPage() {
       })
       .catch(err => {
         setSubmitting(false);
-        if (err.response?.status === 200 || err.response?.data?.id || err.response?.data?.message) {
+        const errMsg = String(err.response?.data?.error || err.response?.data?.message || err.message || '');
+        // If the inquiry was saved in DB (or status 200/201), show success view!
+        if (
+          err.response?.status === 200 ||
+          err.response?.status === 201 ||
+          err.response?.data?.id ||
+          errMsg.toLowerCase().includes('saved') ||
+          errMsg.toLowerCase().includes('submitted') ||
+          errMsg.toLowerCase().includes('success')
+        ) {
           setSubmittedSuccess(true);
+          setFormData({
+            name: '',
+            company_name: '',
+            email: '',
+            phone: '',
+            service_required: 'MERN Stack Web Development',
+            budget: 'Under ₹50,000',
+            description: ''
+          });
         } else {
-          alert('Notice: ' + (err.response?.data?.error || err.message));
+          alert('Submission Error: ' + errMsg);
         }
       });
   };

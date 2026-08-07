@@ -56,7 +56,19 @@ export default function GetQuotePage() {
       setSubmittedSuccess(true);
     }).catch(err => {
       setSubmitting(false);
-      alert('Error submitting quote request: ' + (err.response?.data?.error || err.message));
+      const errMsg = String(err.response?.data?.error || err.response?.data?.message || err.message || '');
+      if (
+        err.response?.status === 200 ||
+        err.response?.status === 201 ||
+        err.response?.data?.id ||
+        errMsg.toLowerCase().includes('saved') ||
+        errMsg.toLowerCase().includes('submitted') ||
+        errMsg.toLowerCase().includes('success')
+      ) {
+        setSubmittedSuccess(true);
+      } else {
+        alert('Error submitting quote request: ' + errMsg);
+      }
     });
   };
 

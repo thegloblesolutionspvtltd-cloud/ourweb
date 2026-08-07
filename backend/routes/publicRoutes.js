@@ -186,7 +186,10 @@ router.post('/quote', formLimiter, (req, res) => {
   stmt.run(name, email, phone || '', project_type || '', budget || '', timeline || '', features || '', function(err) {
     if (err) return res.status(500).json({ error: 'Failed to record quote request' });
 
-    // Send automated email notification to HR
+    // Send instant success response to frontend
+    res.json({ message: 'Quote request submitted successfully', id: this.lastID });
+
+    // Send automated email notification to HR in background
     sendHRInquiryEmail({
       name,
       company_name: 'Project Quote Request',
@@ -197,8 +200,6 @@ router.post('/quote', formLimiter, (req, res) => {
       description: `Timeline: ${timeline || 'N/A'}\nRequested Features: ${features || 'N/A'}`,
       timestamp: new Date().toLocaleString()
     }).catch(e => console.error('HR Email Quote Notification Error:', e.message));
-
-    res.json({ message: 'Quote request submitted successfully and HR notified', id: this.lastID });
   });
 });
 
@@ -220,7 +221,10 @@ router.post('/apply', formLimiter, (req, res) => {
   stmt.run(job_id, job_title || '', name, email, phone || '', cover_letter || '', linkedin || '', function(err) {
     if (err) return res.status(500).json({ error: 'Failed to record job application' });
 
-    // Send automated email notification to HR
+    // Send instant success response to frontend
+    res.json({ message: 'Application submitted successfully', id: this.lastID });
+
+    // Send automated email notification to HR in background
     sendHRInquiryEmail({
       name,
       company_name: `Job Application: ${job_title || 'General Position'}`,
@@ -231,8 +235,6 @@ router.post('/apply', formLimiter, (req, res) => {
       description: `LinkedIn: ${linkedin || 'N/A'}\nCover Letter: ${cover_letter || 'N/A'}`,
       timestamp: new Date().toLocaleString()
     }).catch(e => console.error('HR Email Job Application Notification Error:', e.message));
-
-    res.json({ message: 'Application submitted successfully and HR notified', id: this.lastID });
   });
 });
 
