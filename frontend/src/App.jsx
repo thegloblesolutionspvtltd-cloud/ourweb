@@ -19,9 +19,12 @@ import GetQuotePage from './pages/GetQuotePage';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 
+import ScrollToTop from './components/common/ScrollToTop';
+
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-[#0b0f19] text-gray-100 selection:bg-blue-600 selection:text-white">
+      <ScrollToTop />
       <Navbar />
       
       <main className="flex-grow">
